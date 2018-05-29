@@ -4,7 +4,7 @@ public class Main extends JFrame {
     private GraphicsPanel graphics = new GraphicsPanel();
 
     public Main(){
-        super("");
+        super("Space Station");
         setSize(800, 800 + 22);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
