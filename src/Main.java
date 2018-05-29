@@ -1,6 +1,15 @@
-public class Main {
-    public Main(){
+import javax.swing.*;
 
+public class Main extends JFrame {
+    private GraphicsPanel graphics = new GraphicsPanel();
+
+    public Main(){
+        super("");
+        setSize(800, 800 + 22);
+        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        setResizable(false);
+        add(graphics);
+        setVisible(true);
     }
 
     public static void main(String[] args) {
