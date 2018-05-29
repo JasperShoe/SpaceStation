@@ -48,6 +48,10 @@ public class Sprite {
         this.speed = speed;
     }
 
+    public void setImg(BufferedImage img){
+        this.img = img;
+    }
+
     //Getters
     public int getX(){
         return x;
