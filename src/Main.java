@@ -1,7 +1,7 @@
 import javax.swing.*;
 
 public class Main extends JFrame {
-    private GraphicsPanel graphics = new GraphicsPanel();
+    public static GraphicsPanel graphics = new GraphicsPanel();
 
     public Main(){
         super("Space Station");
