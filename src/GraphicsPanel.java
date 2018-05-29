@@ -4,7 +4,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class GraphicsPanel extends JPanel {
-    public static Player player;
+    private Player player;
 
     public GraphicsPanel(){
         setSize(WIDTH, HEIGHT);
@@ -12,8 +12,9 @@ public class GraphicsPanel extends JPanel {
         setFocusable(true);
 
         player = new Player(100, 100);
-        player.setSpeed(10);
+        player.setSpeed(4);
         player.setImg(Images.playerImg);
+        addKeyListener(player);
 
         Timer update = new Timer(1000 / 60, new ActionListener() {
             @Override
@@ -26,6 +27,6 @@ public class GraphicsPanel extends JPanel {
 
     public void paintComponent(Graphics g){
         Graphics2D g2 = (Graphics2D) g;
-        player.draw(g2);
+        player.update(g2);
     }
 }
