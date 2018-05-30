@@ -28,6 +28,7 @@ public class GraphicsPanel extends JPanel {
     public void paintComponent(Graphics g){
         Graphics2D g2 = (Graphics2D) g;
         g2.translate(player.getTransX(), player.getTransY());
+        g2.fillRect(100, 100, 100, 100);
         player.update(g2);
     }
 }
