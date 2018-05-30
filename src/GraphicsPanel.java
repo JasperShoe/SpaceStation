@@ -16,7 +16,7 @@ public class GraphicsPanel extends JPanel {
         player.setImg(Images.player_front);
         addKeyListener(player);
 
-        Timer update = new Timer(1000 / 60, new ActionListener() {
+        Timer update = new Timer(1000/60, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 repaint();
