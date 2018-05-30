@@ -2,7 +2,7 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 
 public class Sprite {
-    private int x, y, speed;
+    private int x, y, transX, transY, speed;
 
     private boolean isAlive;
 
@@ -11,6 +11,9 @@ public class Sprite {
     public Sprite(int x, int y){
         this.x = x;
         this.y = y;
+        transX = 0;
+        transY = 0;
+        speed = 0;
         isAlive = true;
     }
 
@@ -19,20 +22,19 @@ public class Sprite {
     }
 
     public void move(int dir){
-        int vX = 0, vY = 0;
-
         if(dir == 0){ //Left
-            vX = -speed;
+            x -= speed;
+            transX += speed;
         } else if (dir == 1){ //Right
-            vX = speed;
+            x += speed;
+            transX -= speed;
         } else if(dir == 2){ //Up
-            vY = -speed;
+            y -= speed;
+            transY += speed;
         }  else if(dir == 3){ //Down
-            vY = speed;
+            y += speed;
+            transY -= speed;
         }
-
-        x += vX;
-        y += vY;
     }
 
     //Setters
@@ -59,6 +61,14 @@ public class Sprite {
 
     public int getY(){
         return y;
+    }
+
+    public int getTransX(){
+        return transX;
+    }
+
+    public int getTransY(){
+        return transY;
     }
 
     public int getSpeed(){
