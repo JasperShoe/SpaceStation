@@ -15,8 +15,10 @@ public class Player extends Sprite implements KeyListener {
         } else if(moveRight){
             move(1);
         } else if(moveUp){
+            setImg(Images.player_back);
             move(2);
         } else if(moveDown){
+            setImg(Images.player_front);
             move(3);
         }
         draw(g2);
