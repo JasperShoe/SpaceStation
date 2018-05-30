@@ -13,7 +13,7 @@ public class GraphicsPanel extends JPanel {
 
         player = new Player(100, 100);
         player.setSpeed(4);
-        player.setImg(Images.playerImg);
+        player.setImg(Images.player_front);
         addKeyListener(player);
 
         Timer update = new Timer(1000 / 60, new ActionListener() {
