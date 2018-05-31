@@ -17,7 +17,7 @@ public class Enemy extends Sprite {
         Timer randomlyMove = new Timer(1000, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if(new Random().nextInt(100) < 50 && hasRandomLoc == false) {
+                if(new Random().nextInt(100) < 33 && hasRandomLoc == false) {
                     randomX = (new Random().nextInt(randomRange*2) - randomRange + getX())/getSpeed()*getSpeed();
                     randomY = (new Random().nextInt(randomRange*2) - randomRange + getY())/getSpeed()*getSpeed();
                     hasRandomLoc = true;
