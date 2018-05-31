@@ -50,14 +50,14 @@ public class Sprite {
         y = ySet;
     }
 
-//    public boolean collide(Rectangle other){
-//        if((getX() >= other.x && getX() <= other.x + other.width) || (getX() + getW() >= other.x && getX() + getW() <= other.x + other.width)){
-//            if((getY() >= other.y && getY() <= other.y + other.height) || (getY() + getH() >= other.y && getY() + getH() <= other.y + other.height)){
-//                return true;
-//            }
-//        }
-//        return false;
-//    }
+    public boolean collide(Rectangle other){
+        if((getX() >= other.x && getX() <= other.x + other.width) || (getX() + getW() >= other.x && getX() + getW() <= other.x + other.width)){
+            if((getY() >= other.y && getY() <= other.y + other.height) || (getY() + getH() >= other.y && getY() + getH() <= other.y + other.height)){
+                return true;
+            }
+        }
+        return false;
+    }
 
     public void setX(int x){
         this.x = x;
