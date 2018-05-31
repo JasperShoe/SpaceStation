@@ -15,6 +15,7 @@ public class GraphicsPanel extends JPanel {
     private Gun mp5;
 
     private int speed = 4;
+    private Floor floor;
 
     public GraphicsPanel(){
 
@@ -24,6 +25,9 @@ public class GraphicsPanel extends JPanel {
 
         player = new Player(400-16, 400-16, 32, 32);
         player.setSpeed(speed);
+
+        floor = new Floor();
+
         player.setImg(Images.player_front);
         addKeyListener(player);
 
@@ -87,16 +91,18 @@ public class GraphicsPanel extends JPanel {
 
         }
 */
-        player.update(g2);
-        Floor floor = new Floor();
+
         for(Cell[] cells : floor.getMap()){
             for(Cell cell : cells){
                 cell.draw(g2);
             }
         }
-        floor.drawIntersections(g2);
+        //floor.drawIntersections(g2);
+        player.update(g2);
         for(Wall wall : floor.getWalls()){
             wall.draw(g2);
         }
+
+
     }
 }

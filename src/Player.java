@@ -18,30 +18,21 @@ public class Player extends Sprite implements KeyListener {
 
     public void update(Graphics2D g2) {
 
+        if (moveUp) {
+            setImg(Images.player_back);
+            move(2);
+        }
+        if (moveDown) {
+            setImg(Images.player_front);
+            move(3);
+        }
         if (moveLeft) {
 
             setImg(Images.player_left);
             move(0);
-            direction = 0;
-
-        } else if (moveRight) {
-
+        } if (moveRight) {
             setImg(Images.player_right);
             move(1);
-            direction = 1;
-
-        } else if (moveUp) {
-
-            setImg(Images.player_back);
-            move(2);
-            direction = 2;
-
-        } else if (moveDown) {
-
-            setImg(Images.player_front);
-            move(3);
-            direction = 3;
-
         }
 
     }

@@ -7,7 +7,7 @@ import java.awt.*;
  */
 public class Cell {
 
-    public static final int defaultWidth = 80, defaultHeight = 80;
+    public static final int defaultWidth = 500, defaultHeight = 500;
     private Point coords;
     public Cell(int x, int y){
         coords = new Point(x, y);
