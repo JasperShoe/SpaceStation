@@ -2,21 +2,27 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 
 public class Sprite {
+
     private int x, y, w, h, transX, transY, speed;
 
     private boolean isAlive;
 
     private BufferedImage img;
 
+    private Point pos = new Point(getX(), getY());
+
     public Sprite(int x, int y, int w, int h){
+
         this.x = x;
         this.y = y;
         this.w = w;
         this.h = h;
+
         transX = 0;
         transY = 0;
         speed = 0;
         isAlive = true;
+
     }
 
     public void draw(Graphics2D g2){
@@ -39,16 +45,20 @@ public class Sprite {
         }
     }
 
-    public boolean collide(Rectangle other){
-        if((getX() >= other.x && getX() <= other.x + other.width) || (getX() + getW() >= other.x && getX() + getW() <= other.x + other.width)){
-            if((getY() >= other.y && getY() <= other.y + other.height) || (getY() + getH() >= other.y && getY() + getH() <= other.y + other.height)){
-                return true;
-            }
-        }
-        return false;
+    public void move(int xSet, int ySet){
+        x = xSet;
+        y = ySet;
     }
 
-    //Setters
+//    public boolean collide(Rectangle other){
+//        if((getX() >= other.x && getX() <= other.x + other.width) || (getX() + getW() >= other.x && getX() + getW() <= other.x + other.width)){
+//            if((getY() >= other.y && getY() <= other.y + other.height) || (getY() + getH() >= other.y && getY() + getH() <= other.y + other.height)){
+//                return true;
+//            }
+//        }
+//        return false;
+//    }
+
     public void setX(int x){
         this.x = x;
     }
@@ -65,7 +75,6 @@ public class Sprite {
         this.img = img;
     }
 
-    //Getters
     public int getX(){
         return x;
     }
@@ -97,4 +106,9 @@ public class Sprite {
     public boolean isAlive(){
         return isAlive;
     }
+
+    public Point getPos() {
+        return pos;
+    }
+
 }
