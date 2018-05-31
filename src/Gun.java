@@ -6,13 +6,12 @@ import java.awt.*;
 
 public class Gun extends Sprite{
 
-    private int gunIndex;
-
-    private int bulletSpeed, bulletDamage, bulletRange, fireRate;
+    private int gunIndex, bulletSpeed, bulletDamage, bulletRange, fireRate;
 
     public Gun(int gunIndex, int x, int y, int w, int h){
 
         super(x, y, w, h);
+        
         this.gunIndex = gunIndex;
 
         setGunStats(gunIndex);
