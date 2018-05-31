@@ -1,3 +1,4 @@
+import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
@@ -15,7 +16,7 @@ public class Player extends Sprite implements KeyListener {
         super(x, y, w, h);
     }
 
-    public void update() {
+    public void update(Graphics2D g2) {
 
         if (moveLeft) {
 

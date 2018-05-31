@@ -1,0 +1,178 @@
+package World;
+
+import java.awt.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+
+/**
+ * Created by student on 5/29/18.
+ */
+public class Floor {
+
+    private Cell[][] map; //cells on floor
+    private Point[][] intersections; //corners of all the cells; walls connect two intersections
+    private ArrayList<Wall> walls;
+    private HashMap<Point, HashMap<String, Boolean>> neighbors;
+    private HashMap<String, Point> neighborDeltas;
+    private HashMap<String, Boolean> neighborTemplate;
+    private HashMap<String, String> oppositesDirections;
+    public Floor(){
+
+        oppositesDirections = new HashMap<>();
+        oppositesDirections.put("Up","Down");
+        oppositesDirections.put("Down", "Up");
+        oppositesDirections.put("Right", "Left");
+        oppositesDirections.put("Left", "Right");
+
+        neighborTemplate = new HashMap<>();
+        neighborTemplate.put("Up", false);
+        neighborTemplate.put("Down", false);
+        neighborTemplate.put("Right", false);
+        neighborTemplate.put("Left", false);
+
+        neighborDeltas = new HashMap<>();
+        neighborDeltas.put("Up", new Point(0, -1 * Cell.defaultHeight));
+        neighborDeltas.put("Right", new Point(Cell.defaultWidth, 0));
+        neighborDeltas.put("Down", new Point(0, Cell.defaultHeight));
+        neighborDeltas.put("Left", new Point(-1 * Cell.defaultWidth, 0));
+
+        neighbors = new HashMap<>();
+
+        walls = new ArrayList<>();
+        map = new Cell[9][9];
+        intersections = new Point[map.length + 1][map[0].length + 1];
+        addIntersection(0, 0, new Point(0,0));
+        for (int x = 0; x < map[0].length; x++) {
+            addIntersection(0, x+1, new Point((x+1) * Cell.defaultWidth, 0));
+        }
+        for(int i = 0; i < map.length; i++){
+            addIntersection(i+1, 0, new Point(0, (i + 1) * Cell.defaultHeight));
+            for (int j = 0; j < map[0].length; j++) {
+                map[i][j] = new Cell(j * Cell.defaultWidth, i * Cell.defaultHeight);
+                addIntersection(i+1, j+1, new Point((j+1) * Cell.defaultWidth, (i+1) * Cell.defaultHeight));
+            }
+        }
+        placeWalls();
+    }
+
+    public Cell[][] getMap() {
+        return map;
+    }
+
+    public void setMap(Cell[][] map) {
+        this.map = map;
+    }
+
+    public void addIntersection(int r, int c, Point p){
+        HashMap<String, Boolean> neighborMap = (HashMap<String,Boolean>)neighborTemplate.clone();
+
+        intersections[r][c] = p;
+        neighbors.put(p, neighborMap);
+    }
+
+    public void drawIntersections(Graphics2D g2){
+        g2.setColor(Color.red);
+        for(Point[] points : intersections){
+            for(Point point : points){
+                g2.fillOval(point.x - 2, point.y - 2, 4, 4);
+            }
+        }
+    }
+
+    public void placeWalls(){
+        placeExternalWalls();
+        while(walls.size() < 100) {
+            Wall start = walls.get((int) (Math.random() * walls.size()));
+            Point startPoint = start.getA();
+            while (availableDirections(startPoint).size() == 0) {
+                start = walls.get((int) (Math.random() * walls.size()));
+                startPoint = start.getA();
+            }
+
+            placeInternalWall(startPoint);
+            System.out.println(walls.size());
+        }
+    }
+
+    public void placeExternalWalls(){
+        for (int i = 0; i < 4; i++) {
+            for (int j = 1; j < intersections.length; j++) { //assumes map is square
+                Point start;
+                String delta;
+                switch(i){
+                    case(0):
+                        start = intersections[0][j-1];
+                        neighbors.get(start).put("Up", true);
+                        neighbors.get(start).put("Left", true);
+                        delta = "Right";
+                        break;
+                    case(1):
+                        start = intersections[j-1][map.length];
+                        neighbors.get(start).put("Right", true);
+                        neighbors.get(start).put("Up", true);
+                        delta = "Down";
+                        break;
+                    case(2):
+                        start = intersections[map.length][intersections.length-j];
+                        neighbors.get(start).put("Down", true);
+                        neighbors.get(start).put("Right", true);
+                        delta = "Left";
+                        break;
+                    case(3):
+                        start = intersections[intersections.length -j][0];
+                        neighbors.get(start).put("Left", true);
+                        neighbors.get(start).put("Down", true);
+                        delta = "Up";
+                        break;
+                    default:
+                        start = intersections[0][0];
+                        delta = "Up";
+                        break;
+                }
+                addWall(start, delta);
+            }
+        }
+    }
+
+    public void placeInternalWall(Point start){
+        ArrayList<String> directions = availableDirections(start);
+        String delta = directions.get((int)(Math.random() * directions.size()));
+        Wall placed = addWall(start, delta);
+        if(availableDirections(placed.getA()).size() > ((Math.random() > .5)?2:1)){
+            placeInternalWall(placed.getA());
+        }
+        if(availableDirections(placed.getB()).size() > 1){
+            placeInternalWall(placed.getB());
+        }
+    }
+
+    public boolean isEdge(Point point){
+        return (point.x == 0 || point.x == Cell.defaultWidth * map.length || point.y == 0 || point.y == Cell.defaultHeight * map.length);
+    }
+
+    public ArrayList<Wall> getWalls() {
+        return walls;
+    }
+
+    public Wall addWall(Point start, String delta){//builds wall from start to point in direction of delta
+        Point translation = neighborDeltas.get(delta);
+        Point end = start.getLocation();
+        end.translate(translation.x, translation.y);
+        Wall toAdd = new Wall(start, end);
+        walls.add(toAdd);
+        neighbors.get(start).put(delta, true);
+        neighbors.get(intersections[end.y/Cell.defaultHeight][end.x/Cell.defaultWidth]).put(oppositesDirections.get(delta), true);
+
+        return toAdd;
+    }
+
+    public ArrayList<String> availableDirections(Point p){
+        ArrayList<String> available = new ArrayList<>();
+        Point intersection = intersections[p.y/Cell.defaultHeight][p.x/Cell.defaultWidth];
+        for(String s : neighbors.get(intersection).keySet()){
+            if(!neighbors.get(intersection).get(s))
+                available.add(s);
+        }
+        return available;
+    }
+}

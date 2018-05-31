@@ -1,3 +1,7 @@
+import World.Cell;
+import World.Floor;
+import World.Wall;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -46,6 +50,7 @@ public class GraphicsPanel extends JPanel {
 
         Graphics2D g2 = (Graphics2D) g;
         g2.translate(player.getTransX(), player.getTransY());
+/* Mike Chen's preliminary gun implementation:
 
         mp5.update(player, g2, MouseInfo.getPointerInfo().getLocation());
         player.update();
@@ -81,6 +86,17 @@ public class GraphicsPanel extends JPanel {
             mp5.draw(g2);
 
         }
-
+*/
+        player.update(g2);
+        Floor floor = new Floor();
+        for(Cell[] cells : floor.getMap()){
+            for(Cell cell : cells){
+                cell.draw(g2);
+            }
+        }
+        floor.drawIntersections(g2);
+        for(Wall wall : floor.getWalls()){
+            wall.draw(g2);
+        }
     }
 }
