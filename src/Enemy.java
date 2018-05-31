@@ -9,15 +9,15 @@ public class Enemy extends Sprite {
 
     private int randomX, randomY, randomRange;
 
-    public Enemy(int x, int y){
-        super(x, y);
+    public Enemy(int x, int y, int w, int h){
+        super(x, y, w, h);
         hasRandomLoc = false;
         randomRange = 200;
 
         Timer randomlyMove = new Timer(1000, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if(new Random().nextInt(100) < 33 && hasRandomLoc == false) {
+                if(new Random().nextInt(100) < 33 && !hasRandomLoc) {
                     randomX = (new Random().nextInt(randomRange*2) - randomRange + getX())/getSpeed()*getSpeed();
                     randomY = (new Random().nextInt(randomRange*2) - randomRange + getY())/getSpeed()*getSpeed();
                     hasRandomLoc = true;
