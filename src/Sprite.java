@@ -2,15 +2,17 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 
 public class Sprite {
-    private int x, y, transX, transY, speed;
+    private int x, y, w, h, transX, transY, speed;
 
     private boolean isAlive;
 
     private BufferedImage img;
 
-    public Sprite(int x, int y){
+    public Sprite(int x, int y, int w, int h){
         this.x = x;
         this.y = y;
+        this.w = w;
+        this.h = h;
         transX = 0;
         transY = 0;
         speed = 0;
@@ -37,6 +39,15 @@ public class Sprite {
         }
     }
 
+    public boolean collide(Rectangle other){
+        if((getX() >= other.x && getX() <= other.x + other.width) || (getX() + getW() >= other.x && getX() + getW() <= other.x + other.width)){
+            if((getY() >= other.y && getY() <= other.y + other.height) || (getY() + getH() >= other.y && getY() + getH() <= other.y + other.height)){
+                return true;
+            }
+        }
+        return false;
+    }
+
     //Setters
     public void setX(int x){
         this.x = x;
@@ -61,6 +72,14 @@ public class Sprite {
 
     public int getY(){
         return y;
+    }
+
+    public int getW(){
+        return w;
+    }
+
+    public int getH(){
+        return h;
     }
 
     public int getTransX(){
