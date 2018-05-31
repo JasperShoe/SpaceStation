@@ -5,8 +5,8 @@ import java.awt.event.KeyListener;
 public class Player extends Sprite implements KeyListener {
     private boolean moveLeft, moveRight, moveUp, moveDown;
 
-    public Player(int x, int y) {
-        super(x, y);
+    public Player(int x, int y, int w, int h) {
+        super(x, y, w, h);
     }
 
     public void update(Graphics2D g2) {
