@@ -11,7 +11,7 @@ public class GraphicsPanel extends JPanel {
         setLayout(null);
         setFocusable(true);
 
-        player = new Player(400-16, 400-16);
+        player = new Player(400-16, 400-16, 32, 32);
         player.setSpeed(4);
         player.setImg(Images.player_front);
         addKeyListener(player);
