@@ -29,7 +29,7 @@ public class Enemy extends Sprite {
         randomlyMove.start();
     }
 
-    public void update(Graphics2D g2){
+    public void update(){
         if(hasRandomLoc){
             if(getX() != randomX){
                 if(randomX < getX()){
@@ -48,6 +48,5 @@ public class Enemy extends Sprite {
             }
         }
         super.update();
-        draw(g2);
     }
 }
