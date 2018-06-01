@@ -1,3 +1,7 @@
+package World;
+
+import Client.*;
+import Character.*;
 import java.awt.*;
 
 /**
@@ -20,7 +24,7 @@ public class Gun extends Sprite{
 
     public void update(Player player, Graphics2D g2, Point mouseCoords) {
 
-        move(player.getX(), player.getY());
+        translate(player.getX() - getX(), player.getY() - getY());
 
     }
 

@@ -1,7 +1,11 @@
+package Client;
+
 import World.Cell;
 import World.Floor;
 import World.Wall;
 
+import Character.*;
+import World.*;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -28,12 +32,12 @@ public class GraphicsPanel extends JPanel {
 
         floor = new Floor();
 
-        player.setImg(Images.player_front);
+        player.setImg(Images.list.get("player_front"));
         addKeyListener(player);
 
         mp5 = new Gun(0, 400-16, 400-16, 32, 32);
         mp5.setSpeed(speed);
-        mp5.setImg(Images.gun_mp5);
+        mp5.setImg(Images.list.get("gun_mp5"));
 
         Timer update = new Timer(1000/60, new ActionListener() {
 
@@ -92,17 +96,24 @@ public class GraphicsPanel extends JPanel {
         }
 */
 
+
         for(Cell[] cells : floor.getMap()){
             for(Cell cell : cells){
                 cell.draw(g2);
             }
         }
         //floor.drawIntersections(g2);
-        player.update(g2);
+
+        player.draw(g2);
         for(Wall wall : floor.getWalls()){
             wall.draw(g2);
+            if(wall.intersects(player.getBoundingRectangle())){
+                wall.collide(player);
+            }
         }
 
+
+        player.update(g2, getMousePosition());
 
     }
 }

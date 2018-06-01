@@ -1,3 +1,5 @@
+package Character;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -45,7 +47,7 @@ public class Enemy extends Sprite {
                 hasRandomLoc = false;
             }
         }
-
+        super.update();
         draw(g2);
     }
 }

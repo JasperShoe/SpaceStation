@@ -129,7 +129,7 @@ public class Floor {
                         delta = "Up";
                         break;
                 }
-                addWall(start, delta);
+                addWall(start, delta, false);
             }
         }
     }
@@ -137,7 +137,7 @@ public class Floor {
     public void placeInternalWall(Point start){
         ArrayList<String> directions = availableDirections(start);
         String delta = directions.get((int)(Math.random() * directions.size()));
-        Wall placed = addWall(start, delta);
+        Wall placed = addWall(start, delta, true);
         if(availableDirections(placed.getA()).size() > ((Math.random() > .5)?2:1)){
             placeInternalWall(placed.getA());
         }
@@ -154,15 +154,23 @@ public class Floor {
         return walls;
     }
 
-    public Wall addWall(Point start, String delta){//builds wall from start to point in direction of delta
+    public Wall addWall(Point start, String delta, boolean hasDoor){//builds wall from start to point in direction of delta
         Point translation = neighborDeltas.get(delta);
         Point end = start.getLocation();
         end.translate(translation.x, translation.y);
-        Wall toAdd = new Wall(start, end);
+        Wall toAdd = new Wall(start, end, hasDoor, this);
         walls.add(toAdd);
         neighbors.get(start).put(delta, true);
         neighbors.get(intersections[end.y/Cell.defaultHeight][end.x/Cell.defaultWidth]).put(oppositesDirections.get(delta), true);
 
+        return toAdd;
+    }
+
+    public Wall addWall(Point start, Point delta, boolean hasDoor){
+        Point end = start.getLocation();
+        end.translate(delta.x, delta.y);
+        Wall toAdd = new Wall(start, end, hasDoor, this);
+        walls.add(toAdd);
         return toAdd;
     }
 
