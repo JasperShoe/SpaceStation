@@ -11,6 +11,7 @@ public class Images {
 
     public static HashMap<String, BufferedImage> list;
     static {
+        list = new HashMap<>();
         String[] loader = {//add your picture strings here!
                 "player_front",
                 "player_back",
