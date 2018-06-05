@@ -119,13 +119,17 @@ public class GraphicsPanel extends JPanel {
         }
 */
 
+        
         for(Cell[] cells : floor.getMap()){
             for(Cell cell : cells){
                 cell.draw(g2);
             }
         }
 
-
+        player.update(g2, mouse);
+        if(!player.getEquipped().isForeground()){
+            player.draw(g2);
+        }
 
         for(Wall wall : floor.getWalls()){
             wall.draw(g2);
@@ -152,10 +156,7 @@ public class GraphicsPanel extends JPanel {
         }
         //        g2.draw(cursor);
 
-        player.update(g2, mouse);
-        if(!player.getEquipped().isForeground()){
-            player.draw(g2);
-        }
+
     }
 
     public void addSprite(Sprite sprite){
