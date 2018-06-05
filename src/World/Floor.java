@@ -1,5 +1,7 @@
 package World;
 
+import Client.GraphicsPanel;
+
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -15,7 +17,11 @@ public class Floor {
     private HashMap<String, Point> neighborDeltas;
     private HashMap<String, Boolean> neighborTemplate;
     private HashMap<String, String> oppositesDirections;
-    public Floor(){
+    private ArrayList<Bullet> bullets;
+    private GraphicsPanel parent;
+    public Floor(GraphicsPanel parent){
+        this.parent = parent;
+        bullets = new ArrayList<>();
 
         oppositesDirections = new HashMap<>();
         oppositesDirections.put("Up","Down");
@@ -209,5 +215,20 @@ public class Floor {
                 available.add(s);
         }
         return available;
+    }
+
+    public int addBullet(Bullet bullet){
+        bullets.add(bullet);
+        parent.addSprite(bullet);
+        return bullets.size() - 1;
+    }
+
+    public void removeBullet(int idx){
+        parent.removeSprite(bullets.get(idx));
+        bullets.remove(idx);
+    }
+
+    public ArrayList<Bullet> getBullets() {
+        return bullets;
     }
 }

@@ -2,12 +2,16 @@ package Character;
 
 import Client.GraphicsPanel;
 import Client.Images;
+import World.Floor;
+import World.Gun;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 
-public class Player extends Sprite implements KeyListener {
+public class Player extends Sprite implements KeyListener, MouseListener{
 
     private boolean moveLeft, moveRight, moveUp, moveDown;
 
@@ -17,12 +21,20 @@ public class Player extends Sprite implements KeyListener {
     //2 is up
     //3 is down
 
-    public Player(int x, int y, int w, int h) {
+    private Gun equipped;
+
+    Floor floor;
+
+    public Player(int x, int y, int w, int h, Floor floor) {
         super(x, y, w, h);
+        this.floor = floor;
+        equipGun(Gun.list.get("mp5"));
+
+
     }
 
 
-    public void update(Point mouse) {
+    public void update(Graphics2D g2, Point mouse) {
         Point playerCenter = new Point(getX() + getTransX() + getW()/2, getY()+getTransY() + getH()/2);
         if (moveUp) {
 //            setImg(Images.player_back);
@@ -54,8 +66,14 @@ public class Player extends Sprite implements KeyListener {
                     setImg(Images.list.get("player_left"));
                 }
             }
+            equipped.update(this, mouseAngle);
+            if(equipped.isForeground()){
+                draw(g2);
+            }
+            equipped.draw(g2);
         }
         super.update();
+
         //draw(g2);
     }
 
@@ -117,5 +135,39 @@ public class Player extends Sprite implements KeyListener {
         super.translate(dx, dy);
         setTransX(getTransX() + -dx);
         setTransY(getTransY() + -dy);
+    }
+
+    public void equipGun(Gun gun){
+        equipped = gun;
+        equipped.setEnvironment(floor);
+    }
+
+    public Gun getEquipped(){
+        return equipped;
+    }
+
+    @Override
+    public void mouseClicked(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mousePressed(MouseEvent e) {
+        equipped.fire();
+    }
+
+    @Override
+    public void mouseReleased(MouseEvent e) {
+        equipped.stop();
+    }
+
+    @Override
+    public void mouseEntered(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseExited(MouseEvent e) {
+
     }
 }

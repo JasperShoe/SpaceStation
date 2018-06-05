@@ -18,12 +18,14 @@ public class Images {
                 "player_left",
                 "player_right",
                 "enemy_front",
-                "gun_mp5",
                 "wall_panel",
                 "wall_side",
                 "wall_external_side",
                 "door_open",
-                "door_closed"
+                "door_closed",
+                "mp5",
+                "cursor",
+                "red_bullet"
         };
         for(String s : loader){
             list.put(s, readImg(s));

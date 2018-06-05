@@ -9,11 +9,13 @@ public abstract class Sprite {
 
     private Rectangle dimensions;
 
-    private boolean isAlive;
+    private boolean isAlive, horizFlip;
 
     private BufferedImage img;
 
     private HashMap<String, Boolean> directions;
+
+    private double rotation;
 
     public Sprite(int x, int y, int w, int h){
         this.x = x;
@@ -23,6 +25,7 @@ public abstract class Sprite {
         transX = 0;
         transY = 0;
         speed = 0;
+        rotation = 0;
         isAlive = true;
         dimensions = new Rectangle(x, y, w, h);
 
@@ -34,8 +37,12 @@ public abstract class Sprite {
     }
 
     public void draw(Graphics2D g2){
-        g2.drawImage(img, null, x, y);
-        g2.drawRect(getBoundingRectangle().x, getBoundingRectangle().y, getBoundingRectangle().width, getBoundingRectangle().height);
+        double toRotate = Math.toRadians(rotation + (horizFlip?180:0));
+        g2.rotate(toRotate, getCenter().x, getCenter().y);
+        g2.drawImage(img, x + (horizFlip?w-8:0), y, w * ((horizFlip)?-1:1), h, null);
+        g2.rotate(-toRotate, getCenter().x, getCenter().y);
+        setDimensions(x, y, w, h);
+//        g2.drawRect(getBoundingRectangle().x, getBoundingRectangle().y, getBoundingRectangle().width, getBoundingRectangle().height);
     }
 
     public void move(int dir){
@@ -83,7 +90,13 @@ public abstract class Sprite {
 
     public void setImg(BufferedImage img){
         this.img = img;
-        dimensions = new Rectangle(getX(), getY(), img.getWidth(), img.getHeight());
+        w = img.getWidth();
+        h = img.getHeight();
+        dimensions = new Rectangle(x, y, w, h);
+    }
+
+    public BufferedImage getImg() {
+        return img;
     }
 
     //Getters
@@ -146,9 +159,38 @@ public abstract class Sprite {
         return directions;
     }
 
+    public int directionCount(){
+        int count = 0;
+        for(String s : directions.keySet()){
+            if(directions.get(s))
+                count++;
+        }
+        return count;
+    }
+
     public void update(){
         for (String s : directions.keySet()) {
             directions.put(s, true);
         }
+    }
+
+    public double getRotation() {
+        return rotation;
+    }
+
+    public void setRotation(double rotation) {
+        this.rotation = rotation;
+    }
+
+    public void setHorizFlip(boolean horizFlip) {
+        this.horizFlip = horizFlip;
+    }
+
+    public Rectangle getDimensions() {
+        return dimensions;
+    }
+
+    public void setDimensions(int x, int y, int width, int height) {
+        dimensions.setBounds(x, y, width, height);
     }
 }
