@@ -119,7 +119,7 @@ public class GraphicsPanel extends JPanel {
         }
 */
 
-        
+
         for(Cell[] cells : floor.getMap()){
             for(Cell cell : cells){
                 cell.draw(g2);

@@ -3,11 +3,14 @@ package Client;
 import sun.audio.AudioPlayer;
 import sun.audio.AudioStream;
 import java.io.FileInputStream;
+import java.io.InputStream;
 
 public class Sounds {
     public void play(String name) {
         try {
-            AudioStream audio = new AudioStream(new FileInputStream("./src/res/" + name + ".wav"));
+            ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+            InputStream stream = classLoader.getResourceAsStream("res/" + name + ".wav");
+            AudioStream audio = new AudioStream(stream);
             AudioPlayer.player.start(audio);
         } catch (Exception e) {
             e.printStackTrace();
