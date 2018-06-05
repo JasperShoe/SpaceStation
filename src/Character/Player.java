@@ -22,7 +22,7 @@ public class Player extends Sprite implements KeyListener {
     }
 
 
-    public void update(Graphics2D g2, Point mouse) {
+    public void update(Point mouse) {
         Point playerCenter = new Point(getX() + getTransX() + getW()/2, getY()+getTransY() + getH()/2);
         if (moveUp) {
 //            setImg(Images.player_back);

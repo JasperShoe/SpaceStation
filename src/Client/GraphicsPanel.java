@@ -43,77 +43,31 @@ public class GraphicsPanel extends JPanel {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-
                 repaint();
-
             }
-
         });
 
         update.start();
-
     }
 
     public void paintComponent(Graphics g){
-
         Graphics2D g2 = (Graphics2D) g;
         g2.translate(player.getTransX(), player.getTransY());
-/* Mike Chen's preliminary gun implementation:
-
-        mp5.update(player, g2, MouseInfo.getPointerInfo().getLocation());
-        player.update();
-
-        //TODO: rotate the gun so that it faces the mouse
-
-        //gun is being held right handed
-        if(player.getDirection() == 0){
-
-            //left
-            mp5.draw(g2);
-            player.draw(g2);
-
-        }
-        else if(player.getDirection() == 1){
-
-            //right
-            player.draw(g2);
-            mp5.draw(g2);
-
-        }
-        else if(player.getDirection() == 2){
-
-            //up
-            mp5.draw(g2);
-            player.draw(g2);
-
-        }
-        else{
-
-            //down
-            player.draw(g2);
-            mp5.draw(g2);
-
-        }
-*/
-
 
         for(Cell[] cells : floor.getMap()){
             for(Cell cell : cells){
                 cell.draw(g2);
             }
         }
-        //floor.drawIntersections(g2);
 
+        player.update(getMousePosition());
         player.draw(g2);
+
         for(Wall wall : floor.getWalls()){
             wall.draw(g2);
             if(wall.intersects(player.getBoundingRectangle())){
                 wall.collide(player);
             }
         }
-
-
-        player.update(g2, getMousePosition());
-
     }
 }

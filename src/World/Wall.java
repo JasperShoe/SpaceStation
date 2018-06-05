@@ -1,25 +1,24 @@
 package World;
 import Character.*;
+import Client.Images;
 
 import java.awt.*;
+import java.util.Comparator;
 
-/**
- * Created by student on 5/29/18.
- */
-public class Wall extends Sprite{
+public class Wall extends Sprite {
 
     private Point a, b;
     private int orientation;
     public static final int HORIZONTAL = 0, VERTICAL = 1;
-    private boolean doorOpen;
+    private boolean hasDoor;
     private Door door;
     //private Cell adjacent;
-    public Wall(Point a, Point b, boolean hasDoor, Floor parent){
+    public Wall(Point a, Point b, boolean hasDoor, Floor parent) {
         super((a.x<b.x)?a.x:b.x, (a.y<b.y)?a.y:b.y, (b.x-a.x != 0)?Math.abs(b.x - a.x):10, (b.y-a.y != 0)?Math.abs(b.y - a.y):10);
         this.a = a;
         this.b = b;
-        doorOpen = true;
         orientation = (a.x - b.x != 0)?HORIZONTAL:VERTICAL;
+        this.hasDoor = hasDoor;
         if(hasDoor){
         Rectangle doorBuild = (Rectangle)getBoundingRectangle().clone();
         if(orientation == HORIZONTAL) {
@@ -27,7 +26,7 @@ public class Wall extends Sprite{
             doorBuild.width /= 5;
         }
         else{
-            doorBuild.y += doorBuild.height * 2/5;
+            doorBuild.y += doorBuild.height * 2 / 5;
             doorBuild.height /= 5;
         }
         door = new Door(doorBuild, parent);
@@ -38,13 +37,21 @@ public class Wall extends Sprite{
     }
 
     public void draw(Graphics2D g2){ //update with images
-        Stroke stroke = g2.getStroke();
-        g2.setColor(Color.red);
-//        g2.setStroke(new BasicStroke(10));
-//        g2.drawLine(a.x, a.y, b.x, b.y);
-//        g2.setStroke(stroke);
-        g2.fill(getBoundingRectangle());
-        g2.setColor(Color.green);
+        if(Math.abs(getA().x - getB().x) > 10 || Math.abs(getA().y - getB().y) > 10) {
+            if (orientation == HORIZONTAL) {
+                if(hasDoor) {
+                    g2.drawImage(Images.list.get("wall_front"), null, getX(), getY() - Images.list.get("wall_front").getHeight() + 10);
+                } else {
+                    g2.drawImage(Images.list.get("wall_external_front"), null, getX(), getY() - Images.list.get("wall_external_front").getHeight() + 10);
+                }
+            } else {
+                if(hasDoor) {
+                    g2.drawImage(Images.list.get("wall_side"), null, getX() - (Images.list.get("wall_side").getWidth() - 10) / 2, getY() - Images.list.get("wall_front").getHeight() + 10);
+                } else {
+                    g2.drawImage(Images.list.get("wall_external_side"), null, getX() - (Images.list.get("wall_external_side").getWidth() - 10) / 2, getY() - Images.list.get("wall_front").getHeight() + 10);
+                }
+            }
+        }
 
         if(door!=null) {
             door.draw(g2);
@@ -60,7 +67,7 @@ public class Wall extends Sprite{
     }
 
     public void collide(Sprite other){
-        if(door==null||!door.isOpen() || !door.intersects(other.getBoundingRectangle())){
+        if(door==null || !door.intersects(other.getBoundingRectangle())){
             String blocked;
             if(orientation == HORIZONTAL){
                 blocked = (other.getCenter().y < a.y)?"Down":"Up";
@@ -69,7 +76,12 @@ public class Wall extends Sprite{
                 blocked = (other.getCenter().x < a.x)?"Right":"Left";
             }
             other.getDirections().put(blocked, false);
+        } else {
+            door.setOpen(true);
         }
+    }
 
+    public int getOrientation() {
+        return orientation;
     }
 }

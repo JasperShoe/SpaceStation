@@ -1,17 +1,15 @@
 package World;
 import Character.*;
+import Client.Images;
 
 import java.awt.*;
 
-/**
- * Created by student on 5/31/18.
- */
 public class Door extends Sprite {
     private boolean open;
     private int orientation;
     public Door(Rectangle rect, Floor parent){
         super(rect.x, rect.y, rect.width, rect.height);
-        open = true;
+        open = false;
         orientation = (rect.width > rect.height)?Wall.HORIZONTAL:Wall.VERTICAL;
 
         if(orientation == Wall.HORIZONTAL) {
@@ -33,6 +31,12 @@ public class Door extends Sprite {
     }
 
     public void draw(Graphics2D g2){
-        g2.draw(getBoundingRectangle());
+        if(orientation == Wall.HORIZONTAL) {
+            if(open) {
+                g2.drawImage(Images.list.get("door_open"), null, getX(), getY() - Images.list.get("door_open").getHeight() + 10);
+            } else {
+                g2.drawImage(Images.list.get("door_closed"), null, getX(), getY() - Images.list.get("door_closed").getHeight() + 10);
+            }
+        }
     }
 }

@@ -2,16 +2,15 @@ package World;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 
-/**
- * Created by student on 5/29/18.
- */
 public class Floor {
 
     private Cell[][] map; //cells on floor
     private Point[][] intersections; //corners of all the cells; walls connect two intersections
-    private ArrayList<Wall> walls;
+    private ArrayList<Wall> walls, vertical, horizontal;
     private HashMap<Point, HashMap<String, Boolean>> neighbors;
     private HashMap<String, Point> neighborDeltas;
     private HashMap<String, Boolean> neighborTemplate;
@@ -91,6 +90,34 @@ public class Floor {
 
             placeInternalWall(startPoint);
             System.out.println(walls.size());
+        }
+
+        ArrayList<Wall> verticalWalls = new ArrayList<>();
+        //Removing vertical walls from "walls" and adding them to "verticalWalls"
+        for(int i = walls.size()-1; i >= 0; i--){
+            if(walls.get(i).getOrientation() == Wall.VERTICAL){
+                verticalWalls.add(walls.get(i));
+                walls.remove(i);
+            }
+        }
+
+        //Sorting vertical walls in "verticalWalls" by y position
+        Collections.sort(verticalWalls, new Comparator<Wall>() {
+            @Override
+            public int compare(Wall wall, Wall other) {
+                if(wall.getY() < other.getY()){
+                    return -1;
+                } else if(wall.getY() > other.getY()){
+                    return 1;
+                } else {
+                    return 0;
+                }
+            }
+        });
+
+        //Adding vertical walls back to "walls"
+        for(Wall vertical : verticalWalls){
+            walls.add(vertical);
         }
     }
 
