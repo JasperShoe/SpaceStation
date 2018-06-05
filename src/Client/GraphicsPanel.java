@@ -14,15 +14,13 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
 public class GraphicsPanel extends JPanel {
-
     private Player player;
     private Gun mp5;
-
     private int speed = 4;
     private Floor floor;
+    private Sounds sounds = new Sounds();
 
     public GraphicsPanel(){
-
         setSize(WIDTH, HEIGHT);
         setLayout(null);
         setFocusable(true);
@@ -39,8 +37,16 @@ public class GraphicsPanel extends JPanel {
         mp5.setSpeed(speed);
         mp5.setImg(Images.list.get("gun_mp5"));
 
-        Timer update = new Timer(1000/60, new ActionListener() {
+        sounds.play("theme");
+        Timer playTheme = new Timer(74000, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                sounds.play("theme");
+            }
+        });
+        playTheme.start();
 
+        Timer update = new Timer(1000/60, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 repaint();
