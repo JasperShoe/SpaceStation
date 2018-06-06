@@ -168,4 +168,9 @@ public class GraphicsPanel extends JPanel {
     public void removeSprite(Sprite sprite){
         moving.remove(sprite);
     }
+
+    public void grabFocus(){
+        super.grabFocus();
+        System.out.println("focused");
+    }
 }
