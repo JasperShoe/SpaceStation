@@ -1,5 +1,7 @@
 package Character;
 
+import Client.Images;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -13,6 +15,7 @@ public class Enemy extends Sprite {
 
     public Enemy(int x, int y, int w, int h){
         super(x, y, w, h);
+        setImg(Images.list.get("enemy_front"));
         hasRandomLoc = false;
         randomRange = 200;
 
