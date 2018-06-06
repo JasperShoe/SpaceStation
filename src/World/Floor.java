@@ -89,7 +89,7 @@ public class Floor {
         while(walls.size() < 100) {
             Wall start = walls.get((int) (Math.random() * walls.size()));
             Point startPoint = start.getA();
-            while (availableDirections(startPoint).size() == 0) {
+            while (availableDirections(startPoint).size() == 0 || (start.getW() < Cell.defaultWidth && start.getH() < Cell.defaultHeight)) {
                 start = walls.get((int) (Math.random() * walls.size()));
                 startPoint = start.getA();
             }
@@ -169,6 +169,9 @@ public class Floor {
 
     public void placeInternalWall(Point start){
         ArrayList<String> directions = availableDirections(start);
+        if(directions.size() == 0){
+            System.out.println("l");
+        }
         String delta = directions.get((int)(Math.random() * directions.size()));
         Wall placed = addWall(start, delta, true);
         if(availableDirections(placed.getA()).size() > ((Math.random() > .5)?2:1)){
@@ -193,6 +196,9 @@ public class Floor {
         end.translate(translation.x, translation.y);
         Wall toAdd = new Wall(start, end, hasDoor, this);
         walls.add(toAdd);
+        if(neighbors.get(start) == null){
+            System.out.println("l");
+        }
         neighbors.get(start).put(delta, true);
         neighbors.get(intersections[end.y/Cell.defaultHeight][end.x/Cell.defaultWidth]).put(oppositesDirections.get(delta), true);
 

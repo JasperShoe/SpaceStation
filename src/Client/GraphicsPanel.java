@@ -79,7 +79,7 @@ public class GraphicsPanel extends JPanel {
         translate[1] = player.getTransY();
         g2.translate(translate[0], translate[1]);
 
-        Point mouse = (getMousePosition() != null)?getMousePosition():new Point(0, 0);
+        Point mouse = (getMousePosition() != null)?getMousePosition():new Point(400, 400);
         cursor.setBounds(mouse.x - translate[0], mouse.y - translate[1], 10, 10);
 /* Mike Chen's preliminary gun implementation:
 
@@ -131,16 +131,6 @@ public class GraphicsPanel extends JPanel {
             player.draw(g2);
         }
 
-        for(Wall wall : floor.getWalls()){
-            wall.draw(g2);
-            for(Sprite sprite : moving){
-                if(wall.intersects(sprite.getBoundingRectangle())){
-                    wall.collide(sprite);
-                }
-            }
-        }
-
-
         for (int i = 0; i < floor.getBullets().size(); i++) {
             Bullet bullet = floor.getBullets().get(i);
 
@@ -154,6 +144,18 @@ public class GraphicsPanel extends JPanel {
             }
 
         }
+
+        for(Wall wall : floor.getWalls()){
+            wall.draw(g2);
+            for(Sprite sprite : moving){
+                if(wall.intersects(sprite.getBoundingRectangle())){
+                    wall.collide(sprite);
+                }
+            }
+        }
+
+
+
         //        g2.draw(cursor);
 
 

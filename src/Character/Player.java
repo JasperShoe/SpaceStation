@@ -10,6 +10,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.ArrayList;
 
 public class Player extends Sprite implements KeyListener, MouseListener{
 
@@ -22,13 +23,20 @@ public class Player extends Sprite implements KeyListener, MouseListener{
     //3 is down
 
     private Gun equipped;
+    private ArrayList<Gun> inventory;
+    int inv_index;
 
     Floor floor;
 
     public Player(int x, int y, int w, int h, Floor floor) {
         super(x, y, w, h);
         this.floor = floor;
-        equipGun(Gun.list.get("mp5"));
+        inv_index = 0;
+        inventory = new ArrayList<>();
+        inventory.add(Gun.list.get("uzi"));
+        inventory.add(Gun.list.get("mp5"));
+        inventory.add(Gun.list.get("laser"));
+        equipGun(inventory.get(inv_index));
 
 
     }
@@ -77,6 +85,12 @@ public class Player extends Sprite implements KeyListener, MouseListener{
         //draw(g2);
     }
 
+    public void switch_gun(){
+        inv_index = (inv_index == inventory.size() - 1)?0:inv_index+1;
+        equipped.stop();
+        equipGun(inventory.get(inv_index));
+    }
+
     @Override
     public void keyPressed(KeyEvent e) {
         int keyCode = e.getKeyCode();
@@ -89,6 +103,9 @@ public class Player extends Sprite implements KeyListener, MouseListener{
             moveUp = true;
         } else if (keyCode == KeyEvent.VK_S) {
             moveDown = true;
+        }
+        else if(keyCode == KeyEvent.VK_Q){
+            switch_gun();
         }
 
     }

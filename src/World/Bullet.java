@@ -65,8 +65,8 @@ public class Bullet extends Sprite {
         this.expired = expired;
     }
 
-    public void draw(Graphics2D g2){
-        super.draw(g2);
-        g2.draw(getBoundingRectangle());
-    }
+//    public void draw(Graphics2D g2){
+//        super.draw(g2);
+////        g2.draw(getBoundingRectangle());
+//    }
 }

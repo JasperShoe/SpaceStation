@@ -28,8 +28,11 @@ public class Images {
                 "door_closed",
                 "mp5",
                 "cursor",
-                "red_bullet",
-                "floor"
+                "bullet_red",
+                "floor",
+                "bullet_yellow",
+                "gun_uzi",
+                "gun_laser"
         };
         for(String s : loader){
             list.put(s, readImg(s));
