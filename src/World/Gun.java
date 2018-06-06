@@ -127,7 +127,7 @@ public class Gun extends Sprite{
         Point bulletSource = new Point((int)(getCenter().x + getW() / 2 * Math.cos(Math.toRadians(getRotation()))), (int)(getCenter().y + getW() / 2 * Math.sin(Math.toRadians(getRotation()))));
         int vx = (int)(Math.cos(Math.toRadians(getRotation())) * bulletSpeed);
         int vy = (int)(Math.sin(Math.toRadians(getRotation())) * bulletSpeed);
-        Bullet bullet = new Bullet(bulletSource.x, bulletSource.y, vx, vy, "red_bullet", source);
+        Bullet bullet = new Bullet(bulletSource.x, bulletSource.y, vx, vy, "bullet_red", source);
         int idx = environment.addBullet(bullet);
         bullet.setIdx(idx);
     }
