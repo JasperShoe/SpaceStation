@@ -1,10 +1,13 @@
 package Client;
 
+import World.Cell;
+
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Images {
@@ -25,13 +28,15 @@ public class Images {
                 "door_closed",
                 "mp5",
                 "cursor",
-                "red_bullet"
+                "red_bullet",
+                "floor"
         };
         for(String s : loader){
             list.put(s, readImg(s));
         }
-        list.put("wall_front", makeFrontWall(list.get("wall_panel")));
-        list.put("wall_external_front", makeExternalFrontWall(list.get("wall_panel")));
+        list.put("wall_front", createCombinedImage(list.get("wall_panel"), 1, 5, new ArrayList(), new ArrayList(){{add(2);}}));
+        list.put("wall_external_front", createCombinedImage(list.get("wall_panel"), 1, 5, new ArrayList(), new ArrayList()));
+        list.put("floor_tiled", createCombinedImage(list.get("floor"), Cell.defaultHeight/list.get("floor").getHeight(), Cell.defaultWidth/list.get("floor").getWidth(), new ArrayList(), new ArrayList()));
     }
 
     public static URL buildImageFile(String file){
@@ -39,10 +44,8 @@ public class Images {
         return classLoader.getResource("res/" + file + ".png");
     }
 
-    public static BufferedImage makeFrontWall(BufferedImage wall){
-        int width = wall.getWidth() * 5;
-        int height = wall.getHeight();
-
+    public static BufferedImage createCombinedImage(BufferedImage img, int r, int c, ArrayList rExceptions, ArrayList cExceptions){
+        int width = c * img.getWidth(), height = r * img.getHeight();
         BufferedImage newImage = new BufferedImage(width,height, BufferedImage.TYPE_INT_ARGB);
         Graphics2D g2 = newImage.createGraphics();
         Color oldColor = g2.getColor();
@@ -50,31 +53,15 @@ public class Images {
         g2.fillRect(0, 0, width, height);
         g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER));
         g2.setColor(oldColor);
-        g2.drawImage(wall, null, 0, 0);
-        g2.drawImage(wall, null, wall.getWidth(), 0);
-        g2.drawImage(wall, null, wall.getWidth()*3, 0);
-        g2.drawImage(wall, null, wall.getWidth()*4, 0);
-        g2.dispose();
-
-        return newImage;
-    }
-
-    public static BufferedImage makeExternalFrontWall(BufferedImage wall){
-        int width = wall.getWidth() * 5;
-        int height = wall.getHeight();
-
-        BufferedImage newImage = new BufferedImage(width,height, BufferedImage.TYPE_INT_ARGB);
-        Graphics2D g2 = newImage.createGraphics();
-        Color oldColor = g2.getColor();
-        g2.setComposite(AlphaComposite.getInstance(AlphaComposite.CLEAR));
-        g2.fillRect(0, 0, width, height);
-        g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER));
-        g2.setColor(oldColor);
-        g2.drawImage(wall, null, 0, 0);
-        g2.drawImage(wall, null, wall.getWidth(), 0);
-        g2.drawImage(wall, null, wall.getWidth()*2, 0);
-        g2.drawImage(wall, null, wall.getWidth()*3, 0);
-        g2.drawImage(wall, null, wall.getWidth()*4, 0);
+        for(int row = 0; row < r; row++){
+            if(!rExceptions.contains(row)) {
+                for (int col = 0; col < c; col++) {
+                    if(!cExceptions.contains(col)){
+                        g2.drawImage(img, null, col*img.getWidth(), row*img.getHeight());
+                    }
+                }
+            }
+        }
         g2.dispose();
 
         return newImage;
