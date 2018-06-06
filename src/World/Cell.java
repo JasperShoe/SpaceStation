@@ -1,5 +1,7 @@
 package World;
 
+import Client.Images;
+
 import java.awt.*;
 
 /**
@@ -14,10 +16,7 @@ public class Cell {
     }
 
     public void draw(Graphics2D g2){
-        g2.setColor(new Color(0,50, 200, 127));
-        g2.fillRect(coords.x, coords.y, defaultWidth, defaultHeight);
-        g2.setColor(Color.gray);
-        g2.drawRect(coords.x, coords.y, defaultWidth, defaultHeight);
+        g2.drawImage(Images.list.get("floor_tiled"), null, coords.x, coords.y);
     }
 
     public Point getCoords() {
