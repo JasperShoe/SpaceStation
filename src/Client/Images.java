@@ -26,7 +26,7 @@ public class Images {
                 "wall_external_side",
                 "door_open",
                 "door_closed",
-                "mp5",
+                "gun_mp5",
                 "cursor",
                 "bullet_red",
                 "floor",
