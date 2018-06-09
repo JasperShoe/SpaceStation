@@ -106,6 +106,8 @@ public class Player extends Sprite implements KeyListener, MouseListener{
         }
         else if(keyCode == KeyEvent.VK_Q){
             switch_gun();
+        } else if(keyCode == KeyEvent.VK_R){
+            equipped.reload();
         }
 
     }

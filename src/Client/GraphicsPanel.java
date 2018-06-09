@@ -69,7 +69,7 @@ public class GraphicsPanel extends JPanel {
 
         update.start();
 
-        setCursor(Toolkit.getDefaultToolkit().createCustomCursor(Images.list.get("cursor"), new Point(0,0), "cursor"));
+
     }
 
     public void paintComponent(Graphics g){
@@ -79,7 +79,8 @@ public class GraphicsPanel extends JPanel {
         translate[1] = player.getTransY();
         g2.translate(translate[0], translate[1]);
 
-        Point mouse = (getMousePosition() != null)?getMousePosition():new Point(400, 400);
+        Point mousePosition = getMousePosition();
+        Point mouse = (mousePosition != null)?mousePosition:new Point(400, 400);
         cursor.setBounds(mouse.x - translate[0], mouse.y - translate[1], 10, 10);
 /* Mike Chen's preliminary gun implementation:
 

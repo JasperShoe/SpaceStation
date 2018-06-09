@@ -86,7 +86,7 @@ public class Floor {
 
     public void placeWalls(){
         placeExternalWalls();
-        while(walls.size() < 100) {
+        while(walls.size() < 200) {
             Wall start = walls.get((int) (Math.random() * walls.size()));
             Point startPoint = start.getA();
             while (availableDirections(startPoint).size() == 0 || (start.getW() < Cell.defaultWidth && start.getH() < Cell.defaultHeight)) {
