@@ -1,9 +1,7 @@
 package World;
 
-import Character.*;
+import Characters.*;
 import Client.*;
-
-import java.awt.*;
 
 /**
  * Created by student on 6/2/18.
@@ -64,6 +62,14 @@ public class Bullet extends Sprite {
     public void setExpired(boolean expired) {
         this.expired = expired;
     }
+
+    public void collide(Characters.Character other){
+        if(!(other).equals(source.getOwner())){
+            other.damage(getDamage());
+        }
+    }
+
+
 
 //    public void draw(Graphics2D g2){
 //        super.draw(g2);

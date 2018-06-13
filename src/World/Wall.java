@@ -1,9 +1,8 @@
 package World;
-import Character.*;
+import Characters.*;
 import Client.Images;
 
 import java.awt.*;
-import java.util.Comparator;
 
 public class Wall extends Sprite {
 

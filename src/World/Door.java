@@ -1,5 +1,5 @@
 package World;
-import Character.*;
+import Characters.*;
 import Client.Images;
 
 import java.awt.*;

@@ -1,4 +1,4 @@
-package Character;
+package Characters;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -143,6 +143,8 @@ public abstract class Sprite {
     //public abstract void collide(Character.Sprite other);
 
     public void translate(int dx, int dy){
+        dx = ((dx > 0 && directions.get("Right") || (dx < 0 && directions.get("Left"))))?dx:0;
+        dy = ((dy > 0 && directions.get("Down") || (dy < 0 && directions.get("Up"))))?dy:0;
         setX(x + dx);
         setY(y + dy);
     }
@@ -192,5 +194,9 @@ public abstract class Sprite {
 
     public void setDimensions(int x, int y, int width, int height) {
         dimensions.setBounds(x, y, width, height);
+    }
+
+    public int getDistance(Sprite other){
+        return (int)(Math.sqrt(Math.pow(getCenter().x - other.getCenter().x, 2) + Math.pow(getCenter().y - other.getCenter().y, 2)));
     }
 }

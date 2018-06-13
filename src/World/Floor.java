@@ -2,6 +2,8 @@ package World;
 
 import Client.GraphicsPanel;
 
+import Characters.Enemy;
+
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -18,10 +20,12 @@ public class Floor {
     private HashMap<String, Boolean> neighborTemplate;
     private HashMap<String, String> oppositesDirections;
     private ArrayList<Bullet> bullets;
+    private ArrayList<Enemy> enemies;
     private GraphicsPanel parent;
     public Floor(GraphicsPanel parent){
         this.parent = parent;
         bullets = new ArrayList<>();
+        enemies = new ArrayList<>();
 
         oppositesDirections = new HashMap<>();
         oppositesDirections.put("Up","Down");
@@ -236,5 +240,19 @@ public class Floor {
 
     public ArrayList<Bullet> getBullets() {
         return bullets;
+    }
+
+    public void addEnemy(Enemy enemy){
+        parent.addSprite(enemy);
+        enemies.add(enemy);
+    }
+
+    public void removeEnemy(Enemy enemy){
+        parent.removeSprite(enemy);
+        enemies.remove(enemy);
+    }
+
+    public ArrayList<Enemy> getEnemies(){
+        return enemies;
     }
 }

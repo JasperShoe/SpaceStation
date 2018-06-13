@@ -1,23 +1,20 @@
 package Client;
 
+import Characters.Character;
 import World.Cell;
 import World.Floor;
 import World.Wall;
 
-import Character.*;
+import Characters.*;
 import World.*;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.util.ArrayList;
 
 public class GraphicsPanel extends JPanel {
     private Player player;
-    private Gun mp5;
-
 
     private int speed = 2;
     private Floor floor;
@@ -30,7 +27,7 @@ public class GraphicsPanel extends JPanel {
 
     public GraphicsPanel(){
 
-
+//        Enemy.buildList();
         moving = new ArrayList<Sprite>();
 
         setSize(WIDTH, HEIGHT);
@@ -39,7 +36,7 @@ public class GraphicsPanel extends JPanel {
 
         floor = new Floor(this);
 
-        player = new Player(400-16, 400-16, 32, 32, floor);
+        player = new Player(400-16, 400-16, floor);
         player.setSpeed(speed);
 
 
@@ -51,14 +48,14 @@ public class GraphicsPanel extends JPanel {
 
         cursor = new Rectangle(0, 0, 10, 10);
 
-        sounds.play("theme");
-        Timer playTheme = new Timer(74000, new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                sounds.play("theme");
-            }
-        });
-        playTheme.start();
+//        sounds.play("theme");
+//        Timer playTheme = new Timer(74000, new ActionListener() {
+//            @Override
+//            public void actionPerformed(ActionEvent e) {
+//                sounds.play("theme");
+//            }
+//        });
+//        playTheme.start();
 
         Timer update = new Timer(1000/60, new ActionListener() {
             @Override
@@ -82,43 +79,6 @@ public class GraphicsPanel extends JPanel {
         Point mousePosition = getMousePosition();
         Point mouse = (mousePosition != null)?mousePosition:new Point(400, 400);
         cursor.setBounds(mouse.x - translate[0], mouse.y - translate[1], 10, 10);
-/* Mike Chen's preliminary gun implementation:
-
-        mp5.update(player, g2, MouseInfo.getPointerInfo().getLocation());
-        player.update();
-
-        //TODO: rotate the gun so that it faces the mouse
-
-        //gun is being held right handed
-        if(player.getDirection() == 0){
-
-            //left
-            mp5.draw(g2);
-            player.draw(g2);
-
-        }
-        else if(player.getDirection() == 1){
-
-            //right
-            player.draw(g2);
-            mp5.draw(g2);
-
-        }
-        else if(player.getDirection() == 2){
-
-            //up
-            mp5.draw(g2);
-            player.draw(g2);
-
-        }
-        else{
-
-            //down
-            player.draw(g2);
-            mp5.draw(g2);
-
-        }
-*/
 
 
         for(Cell[] cells : floor.getMap()){
@@ -132,8 +92,28 @@ public class GraphicsPanel extends JPanel {
             player.draw(g2);
         }
 
+        for(Enemy enemy : floor.getEnemies()){
+            enemy.update(g2, player, enemy.getPlayerAngle(player));
+            if(!enemy.getEquipped().isForeground()){
+                enemy.draw(g2);
+            }
+            if(enemy.intersects(player.getBoundingRectangle())){
+                player.damage(5);
+            }
+        }
+
         for (int i = 0; i < floor.getBullets().size(); i++) {
             Bullet bullet = floor.getBullets().get(i);
+
+            if(bullet.intersects(player.getBoundingRectangle())){
+                bullet.collide(player);
+            }
+            for (int j = floor.getEnemies().size() - 1; j >= 0; j--) {
+                Enemy enemy = floor.getEnemies().get(j);
+                if(bullet.intersects(enemy.getBoundingRectangle())){
+                    bullet.collide(enemy);
+                }
+            }
 
             if(bullet.isExpired()){
                 floor.getBullets().remove(i);
@@ -173,5 +153,9 @@ public class GraphicsPanel extends JPanel {
     public void grabFocus(){
         super.grabFocus();
         System.out.println("focused");
+    }
+
+    public static double getAngle(Point a, Point b){
+        return Math.toDegrees(Math.atan2(b.y - a.y, b.x - a.x));
     }
 }

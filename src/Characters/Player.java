@@ -1,4 +1,4 @@
-package Character;
+package Characters;
 
 import Client.GraphicsPanel;
 import Client.Images;
@@ -12,7 +12,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
 
-public class Player extends Sprite implements KeyListener, MouseListener{
+public class Player extends Character implements KeyListener, MouseListener{
 
     private boolean moveLeft, moveRight, moveUp, moveDown;
 
@@ -22,20 +22,18 @@ public class Player extends Sprite implements KeyListener, MouseListener{
     //2 is up
     //3 is down
 
-    private Gun equipped;
     private ArrayList<Gun> inventory;
     int inv_index;
 
-    Floor floor;
 
-    public Player(int x, int y, int w, int h, Floor floor) {
-        super(x, y, w, h);
-        this.floor = floor;
+    public Player(int x, int y, Floor floor) {
+        super(x, y, 100, 2, floor);
         inv_index = 0;
         inventory = new ArrayList<>();
-        inventory.add(Gun.list.get("uzi"));
-        inventory.add(Gun.list.get("mp5"));
-        inventory.add(Gun.list.get("laser"));
+        inventory.add(Gun.get("uzi"));
+        inventory.add(Gun.get("mp5"));
+        inventory.add(Gun.get("laser"));
+        inventory.add(Gun.get("sniper"));
         equipGun(inventory.get(inv_index));
 
 
@@ -62,7 +60,7 @@ public class Player extends Sprite implements KeyListener, MouseListener{
         }
 
         if(mouse != null) {
-            double mouseAngle = Math.toDegrees(Math.atan2(mouse.y - playerCenter.y, mouse.x - playerCenter.x));
+            double mouseAngle = GraphicsPanel.getAngle(playerCenter, mouse);
             if (mouseAngle > -105 && mouseAngle < -75) {
                 setImg(Images.list.get("player_back"));
             } else if (mouseAngle < 105 && mouseAngle > 75) {
@@ -74,11 +72,11 @@ public class Player extends Sprite implements KeyListener, MouseListener{
                     setImg(Images.list.get("player_left"));
                 }
             }
-            equipped.update(this, mouseAngle);
-            if(equipped.isForeground()){
+            getEquipped().update(this, mouseAngle);
+            if(getEquipped().isForeground()){
                 draw(g2);
             }
-            equipped.draw(g2);
+            getEquipped().draw(g2);
         }
         super.update();
 
@@ -87,7 +85,7 @@ public class Player extends Sprite implements KeyListener, MouseListener{
 
     public void switch_gun(){
         inv_index = (inv_index == inventory.size() - 1)?0:inv_index+1;
-        equipped.stop();
+        getEquipped().stop();
         equipGun(inventory.get(inv_index));
     }
 
@@ -107,7 +105,7 @@ public class Player extends Sprite implements KeyListener, MouseListener{
         else if(keyCode == KeyEvent.VK_Q){
             switch_gun();
         } else if(keyCode == KeyEvent.VK_R){
-            equipped.reload();
+            getEquipped().reload();
         }
 
     }
@@ -155,15 +153,7 @@ public class Player extends Sprite implements KeyListener, MouseListener{
         setTransX(getTransX() + -dx);
         setTransY(getTransY() + -dy);
     }
-
-    public void equipGun(Gun gun){
-        equipped = gun;
-        equipped.setEnvironment(floor);
-    }
-
-    public Gun getEquipped(){
-        return equipped;
-    }
+    
 
     @Override
     public void mouseClicked(MouseEvent e) {
@@ -172,12 +162,12 @@ public class Player extends Sprite implements KeyListener, MouseListener{
 
     @Override
     public void mousePressed(MouseEvent e) {
-        equipped.fire();
+        getEquipped().fire();
     }
 
     @Override
     public void mouseReleased(MouseEvent e) {
-        equipped.stop();
+        getEquipped().stop();
     }
 
     @Override
@@ -188,5 +178,10 @@ public class Player extends Sprite implements KeyListener, MouseListener{
     @Override
     public void mouseExited(MouseEvent e) {
 
+    }
+
+    @Override
+    public void kill() {
+        setHealth(getMaxHealth());
     }
 }

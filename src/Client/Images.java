@@ -32,7 +32,8 @@ public class Images {
                 "floor",
                 "bullet_yellow",
                 "gun_uzi",
-                "gun_laser"
+                "gun_laser",
+                "gun_sniper"
         };
         for(String s : loader){
             list.put(s, readImg(s));

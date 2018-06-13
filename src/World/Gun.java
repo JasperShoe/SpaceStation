@@ -1,15 +1,13 @@
 package World;
 
+import Characters.Character;
 import Client.*;
-import Character.*;
+import Characters.*;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.geom.AffineTransform;
-import java.awt.image.AffineTransformOp;
-import java.awt.image.BufferedImage;
 import java.util.HashMap;
 
 /**
@@ -24,6 +22,7 @@ public class Gun extends Sprite{
         list.put("mp5", new Gun("gun_mp5", "bullet_red", 5, 10, 500, 3, 20, 4));
         list.put("uzi", new Gun("gun_uzi", "bullet_yellow", 2, 10, 350, 10, 50, 2));
         list.put("laser", new Gun("gun_laser", "bullet_yellow", 10, 10, 800, 2, 6, 2));
+        list.put("sniper", new Gun("gun_sniper", "bullet_yellow", 15, 15, 1000, 1, 3, 1));
     }
 
     private int bulletSpeed, bulletDamage, bulletRange, fireRate, clipSize, clip, reloadTime;
@@ -35,6 +34,8 @@ public class Gun extends Sprite{
     private Timer rounds, reloadDelay;
 
     private Floor environment;
+
+    private Character owner;
 
     public Gun(String name, String bullet_image, int damage, int speed, int range, int fireRate, int clipSize, int reloadSpeed){
 
@@ -69,16 +70,20 @@ public class Gun extends Sprite{
         reloadDelay = new Timer(reloadTime, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                System.out.println(stopped);
                 delayed = false;
                 clip = clipSize;
+                if(!stopped){
+                    fire();
+                }
                 reloadDelay.stop();
             }
         });
     }
 
-    public void update(Player player, double mouseAngle) {
+    public void update(Character character, double mouseAngle) {
 
-        translate(player.getX() - getX(), player.getY() - getY() + 2);
+        translate(character.getX() - getX(), character.getY() - getY() + 2);
         if(mouseAngle > -75 && mouseAngle < 105){
             foreground = true;
             setHorizFlip(false);
@@ -163,5 +168,18 @@ public class Gun extends Sprite{
         rounds.stop();
         delayed = true;
         reloadDelay.start();
+    }
+
+    public Character getOwner() {
+        return owner;
+    }
+
+    public void setOwner(Character owner) {
+        this.owner = owner;
+    }
+
+    public static Gun get(String name){
+        Gun model = Gun.list.get(name);
+        return new Gun(model.name, model.bullet_image, model.bulletDamage, model.bulletSpeed, model.bulletRange, model.fireRate, model.clipSize, 6000/model.reloadTime);
     }
 }
