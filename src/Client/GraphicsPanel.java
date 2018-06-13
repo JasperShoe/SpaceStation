@@ -48,6 +48,11 @@ public class GraphicsPanel extends JPanel {
 
         cursor = new Rectangle(0, 0, 10, 10);
 
+        /*for (int i = 0; i < 4; i++) { //temporary enemy spawn for testing purposes
+            Enemy e = Enemy.get((String)(Enemy.list.keySet().toArray()[(int)(Math.random() * Enemy.list.keySet().size())]));
+            e.init(400 - i * 80, 400 - i * 80, floor);
+        }*/
+
 //        sounds.play("theme");
 //        Timer playTheme = new Timer(74000, new ActionListener() {
 //            @Override

@@ -19,10 +19,10 @@ public class Gun extends Sprite{
     public static HashMap<String, Gun> list;
     static {
         list = new HashMap<>();
-        list.put("mp5", new Gun("gun_mp5", "bullet_red", 5, 10, 500, 3, 20, 4));
-        list.put("uzi", new Gun("gun_uzi", "bullet_yellow", 2, 10, 350, 10, 50, 2));
-        list.put("laser", new Gun("gun_laser", "bullet_yellow", 10, 10, 800, 2, 6, 2));
-        list.put("sniper", new Gun("gun_sniper", "bullet_yellow", 15, 15, 1000, 1, 3, 1));
+        list.put("mp5", new Gun("mp5", "bullet_red", 5, 10, 500, 3, 20, 4));
+        list.put("uzi", new Gun("uzi", "bullet_yellow", 2, 10, 350, 10, 50, 2));
+        list.put("laser", new Gun("laser", "bullet_yellow", 10, 10, 800, 2, 6, 2));
+        list.put("sniper", new Gun("sniper", "bullet_yellow", 15, 15, 1000, 1, 3, 1));
     }
 
     private int bulletSpeed, bulletDamage, bulletRange, fireRate, clipSize, clip, reloadTime;
@@ -40,7 +40,7 @@ public class Gun extends Sprite{
     public Gun(String name, String bullet_image, int damage, int speed, int range, int fireRate, int clipSize, int reloadSpeed){
 
         super(0, 0, 0, 0); //image location set when gun needs to be drawn
-        setImg(Images.list.get(name));
+        setImg(Images.list.get("gun_" + name));
         this.name = name;
         this.bullet_image = bullet_image;
         this.bulletDamage = damage;
@@ -135,6 +135,10 @@ public class Gun extends Sprite{
 
     public void setBulletRange(int bulletRange) {
         this.bulletRange = bulletRange;
+    }
+
+    public String getName() {
+        return name;
     }
 
     public void fire(){

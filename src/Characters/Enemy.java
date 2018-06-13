@@ -68,7 +68,8 @@ public class Enemy extends Character {
 
             @Override
             public Timer attack(Character attacker) {
-                return new Timer(3000, new ActionListener() {
+                int delay = 1000 * (2 + (int)(Math.random() * 3));
+                return new Timer(delay, new ActionListener() {
                     boolean firing = false;
                     @Override
                     public void actionPerformed(ActionEvent e) {
@@ -129,7 +130,7 @@ public class Enemy extends Character {
 
     @Override
     public Enemy clone() {
-        return new Enemy(getMaxHealth(), getSpeed(), getEquipped(), getController());
+        return new Enemy(getMaxHealth(), getSpeed(), Gun.get(getEquipped().getName()), getController());
     }
 
     public static Enemy get(String key){
