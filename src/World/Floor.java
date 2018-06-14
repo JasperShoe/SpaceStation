@@ -16,7 +16,7 @@ public class Floor {
     private Point[][] intersections; //corners of all the cells; walls connect two intersections
     private ArrayList<Wall> walls, vertical, horizontal;
     private HashMap<Point, HashMap<String, Boolean>> neighbors;
-    private HashMap<String, Point> neighborDeltas;
+    public static HashMap<String, Point> neighborDeltas;
     private HashMap<String, Boolean> neighborTemplate;
     private HashMap<String, String> oppositesDirections;
     private ArrayList<Bullet> bullets;
@@ -59,6 +59,20 @@ public class Floor {
             for (int j = 0; j < map[0].length; j++) {
                 map[i][j] = new Cell(j * Cell.defaultWidth, i * Cell.defaultHeight);
                 addIntersection(i+1, j+1, new Point((j+1) * Cell.defaultWidth, (i+1) * Cell.defaultHeight));
+            }
+        }
+        for (int r = 0; r < map.length; r++) {
+            for (int c = 0; c < map[0].length; c++) {
+                HashMap<String, Cell> cellNeighbors = new HashMap<>();
+                if(onMap(r-1, c))
+                    cellNeighbors.put("Up", map[r-1][c]);
+                if(onMap(r, c+1))
+                    cellNeighbors.put("Right", map[r][c+1]);
+                if(onMap(r+1, c))
+                    cellNeighbors.put("Down", map[r+1][c]);
+                if(onMap(r, c-1))
+                    cellNeighbors.put("Left", map[r][c-1]);
+                map[r][c].setNeighbors(cellNeighbors);
             }
         }
         placeWalls();
@@ -206,6 +220,7 @@ public class Floor {
         neighbors.get(start).put(delta, true);
         neighbors.get(intersections[end.y/Cell.defaultHeight][end.x/Cell.defaultWidth]).put(oppositesDirections.get(delta), true);
 
+        placeWallsInCells(start, end);
         return toAdd;
     }
 
@@ -254,5 +269,22 @@ public class Floor {
 
     public ArrayList<Enemy> getEnemies(){
         return enemies;
+    }
+
+    public void placeWallsInCells(Point a, Point b){
+        int r = a.y / Cell.defaultHeight;
+        int c = a.x / Cell.defaultWidth;
+        if(onMap(r, c))
+            map[r][c].addWall(a, b);
+        if(onMap(r - 1, c))
+            map[r-1][c].addWall(a,b);
+        if(onMap(r-1,c-1))
+            map[r-1][c-1].addWall(a,b);
+        if(onMap(r, c-1))
+            map[r][c-1].addWall(a,b);
+    }
+
+    public boolean onMap(int r, int c){
+        return (r >= 0 && c >= 0 && r < map.length && c < map[0].length);
     }
 }

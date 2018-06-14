@@ -64,7 +64,7 @@ public class Bullet extends Sprite {
     }
 
     public void collide(Characters.Character other){
-        if(!(other).equals(source.getOwner())){
+        if(!(other.getClass().equals(source.getOwner().getClass()))){
             other.damage(getDamage());
         }
     }

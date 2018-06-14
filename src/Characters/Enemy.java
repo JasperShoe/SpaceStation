@@ -60,7 +60,7 @@ public class Enemy extends Character {
 
             @Override
             public void move(Sprite moving, Player player) {
-                if(moving.getDistance(player) < 180){
+                if(moving.getDistance(player) < 240){
                     double relAngle = Math.toRadians(GraphicsPanel.getAngle(moving.getCenter(), player.getCenter()));
                     moving.translate((int)(-Math.cos(relAngle)*moving.getSpeed()), (int)(-Math.sin(relAngle)*moving.getSpeed()));
                 }

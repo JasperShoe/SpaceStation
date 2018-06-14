@@ -48,10 +48,10 @@ public class GraphicsPanel extends JPanel {
 
         cursor = new Rectangle(0, 0, 10, 10);
 
-        /*for (int i = 0; i < 4; i++) { //temporary enemy spawn for testing purposes
-            Enemy e = Enemy.get((String)(Enemy.list.keySet().toArray()[(int)(Math.random() * Enemy.list.keySet().size())]));
-            e.init(400 - i * 80, 400 - i * 80, floor);
-        }*/
+//        for (int i = 0; i < 6; i++) { //temporary enemy spawn for testing purposes
+//            Enemy e = Enemy.get((String)(Enemy.list.keySet().toArray()[(int)(Math.random() * Enemy.list.keySet().size())]));
+//            e.init(400 - i * 80, 400 - i * 80, floor);
+//        }
 
 //        sounds.play("theme");
 //        Timer playTheme = new Timer(74000, new ActionListener() {
@@ -71,7 +71,6 @@ public class GraphicsPanel extends JPanel {
 
         update.start();
 
-
     }
 
     public void paintComponent(Graphics g){
@@ -85,7 +84,10 @@ public class GraphicsPanel extends JPanel {
         Point mouse = (mousePosition != null)?mousePosition:new Point(400, 400);
         cursor.setBounds(mouse.x - translate[0], mouse.y - translate[1], 10, 10);
 
-
+        Cell curr_cell = floor.getMap()[(player.getY())/Cell.defaultHeight][(player.getX())/Cell.defaultWidth];
+        if(!curr_cell.isRevealed() && curr_cell.getRect().contains(player.getBoundingRectangle())){
+            curr_cell.reveal(floor);
+        }
         for(Cell[] cells : floor.getMap()){
             for(Cell cell : cells){
                 cell.draw(g2);

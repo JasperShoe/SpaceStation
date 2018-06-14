@@ -2,6 +2,7 @@ package Characters;
 
 import Client.GraphicsPanel;
 import Client.Images;
+import World.Cell;
 import World.Floor;
 import World.Gun;
 
@@ -34,6 +35,7 @@ public class Player extends Character implements KeyListener, MouseListener{
         inventory.add(Gun.get("mp5"));
         inventory.add(Gun.get("laser"));
         inventory.add(Gun.get("sniper"));
+        inventory.add(Gun.get("p90"));
         equipGun(inventory.get(inv_index));
 
 

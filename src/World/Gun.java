@@ -19,13 +19,14 @@ public class Gun extends Sprite{
     public static HashMap<String, Gun> list;
     static {
         list = new HashMap<>();
-        list.put("mp5", new Gun("mp5", "bullet_red", 5, 10, 500, 3, 20, 4));
-        list.put("uzi", new Gun("uzi", "bullet_yellow", 2, 10, 350, 10, 50, 2));
-        list.put("laser", new Gun("laser", "bullet_yellow", 10, 10, 800, 2, 6, 2));
-        list.put("sniper", new Gun("sniper", "bullet_yellow", 15, 15, 1000, 1, 3, 1));
+        list.put("mp5", new Gun("mp5", "bullet_red", 5, 10, 500, 3, 20, Integer.MAX_VALUE, 4));
+        list.put("uzi", new Gun("uzi", "bullet_yellow", 3, 10, 350, 10, 50, 350, 2));
+        list.put("laser", new Gun("laser", "bullet_purple", 10, 10, 800, 2, 6, 50, 2));
+        list.put("sniper", new Gun("sniper", "bullet_yellow", 15, 15, 1000, 1, 3, 25, 1));
+        list.put("p90", new Gun("p90", "bullet_red", 4, 10, 500, 0, 20, 350, 2));
     }
 
-    private int bulletSpeed, bulletDamage, bulletRange, fireRate, clipSize, clip, reloadTime;
+    private int bulletSpeed, bulletDamage, bulletRange, fireRate, clipSize, clip, reloadTime, magazine, fullMag;
 
     private boolean foreground, automatic, delayed, stopped;
 
@@ -37,7 +38,7 @@ public class Gun extends Sprite{
 
     private Character owner;
 
-    public Gun(String name, String bullet_image, int damage, int speed, int range, int fireRate, int clipSize, int reloadSpeed){
+    public Gun(String name, String bullet_image, int damage, int speed, int range, int fireRate, int clipSize, int magazine, int reloadSpeed){
 
         super(0, 0, 0, 0); //image location set when gun needs to be drawn
         setImg(Images.list.get("gun_" + name));
@@ -48,9 +49,12 @@ public class Gun extends Sprite{
         this.bulletRange = range;
         this.clipSize = clipSize;
         this.clip = clipSize;
+        this.magazine = magazine;
+        this.fullMag = magazine;
         this.reloadTime = 6000/reloadSpeed;
+        this.fireRate = fireRate;
         automatic = !(fireRate == 0);
-        this.fireRate = (fireRate == 0)?1:fireRate;
+        fireRate = (fireRate == 0)?1:fireRate;
 
         foreground = true;
 
@@ -70,7 +74,6 @@ public class Gun extends Sprite{
         reloadDelay = new Timer(reloadTime, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.out.println(stopped);
                 delayed = false;
                 clip = clipSize;
                 if(!stopped){
@@ -148,6 +151,9 @@ public class Gun extends Sprite{
             shoot();
             rounds.start();
         }
+        else if(!automatic && !reloadDelay.isRunning()){
+            shoot();
+        }
     }
 
     public void stop(){
@@ -163,6 +169,7 @@ public class Gun extends Sprite{
         int idx = environment.addBullet(bullet);
         bullet.setIdx(idx);
         clip--;
+        magazine--;
         if(clip == 0){
             reload();
         }
@@ -184,6 +191,6 @@ public class Gun extends Sprite{
 
     public static Gun get(String name){
         Gun model = Gun.list.get(name);
-        return new Gun(model.name, model.bullet_image, model.bulletDamage, model.bulletSpeed, model.bulletRange, model.fireRate, model.clipSize, 6000/model.reloadTime);
+        return new Gun(model.name, model.bullet_image, model.bulletDamage, model.bulletSpeed, model.bulletRange, model.fireRate, model.clipSize, model.fullMag, 6000/model.reloadTime);
     }
 }
