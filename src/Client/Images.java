@@ -35,7 +35,8 @@ public class Images {
                 "gun_laser",
                 "gun_sniper",
                 "bullet_purple",
-                "gun_p90"
+                "gun_p90",
+                "gui_main_panel"
         };
         for(String s : loader){
             list.put(s, readImg(s));

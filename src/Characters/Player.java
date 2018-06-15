@@ -155,7 +155,18 @@ public class Player extends Character implements KeyListener, MouseListener{
         setTransX(getTransX() + -dx);
         setTransY(getTransY() + -dy);
     }
-    
+
+    public void addInventory(int i, Gun gun){
+        inventory.add(i, gun);
+    }
+
+    public void removeInventory(int i){
+        inventory.remove(i);
+    }
+
+    public ArrayList<Gun> getInventory(){
+        return inventory;
+    }
 
     @Override
     public void mouseClicked(MouseEvent e) {

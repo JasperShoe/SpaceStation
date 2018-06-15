@@ -1,8 +1,9 @@
 package World;
 
+import Characters.*;
+
 import Characters.Character;
 import Client.*;
-import Characters.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -14,7 +15,7 @@ import java.util.HashMap;
  * Created by student on 5/31/18.
  */
 
-public class Gun extends Sprite{
+public class Gun extends Sprite {
 
     public static HashMap<String, Gun> list;
     static {
@@ -192,5 +193,21 @@ public class Gun extends Sprite{
     public static Gun get(String name){
         Gun model = Gun.list.get(name);
         return new Gun(model.name, model.bullet_image, model.bulletDamage, model.bulletSpeed, model.bulletRange, model.fireRate, model.clipSize, model.fullMag, 6000/model.reloadTime);
+    }
+
+    public int getClipSize(){
+        return clipSize;
+    }
+
+    public int getClip(){
+        return clip;
+    }
+
+    public int getReloadTime(){
+        return reloadTime;
+    }
+
+    public Timer getReloadDelay(){
+        return reloadDelay;
     }
 }
