@@ -32,6 +32,7 @@ public class GraphicsPanel extends JPanel {
         setSize(WIDTH, HEIGHT);
         setLayout(null);
         setFocusable(true);
+        setBackground(Color.BLACK);
 
         floor = new Floor(this);
 
