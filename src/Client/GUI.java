@@ -79,6 +79,7 @@ public class GUI extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if(!stOpen) {
+                    setOpaque(false);
                     stOpen = true;
                     invOpen = false;
                     gunSlotPanel.setVisible(false);
