@@ -1,6 +1,5 @@
 package Client;
 
-import Characters.Character;
 import World.Cell;
 import World.Floor;
 import World.Wall;
@@ -15,10 +14,10 @@ import java.util.ArrayList;
 
 public class GraphicsPanel extends JPanel {
     private Player player;
+    private GUI gui;
 
     private int speed = 2;
     private Floor floor;
-    private Sounds sounds = new Sounds();
 
     private Rectangle cursor;
     private int[] translate = {0, 0};
@@ -27,7 +26,7 @@ public class GraphicsPanel extends JPanel {
 
     public GraphicsPanel(){
 
-//        Enemy.buildList();
+
         moving = new ArrayList<Sprite>();
 
         setSize(WIDTH, HEIGHT);
@@ -39,12 +38,13 @@ public class GraphicsPanel extends JPanel {
         player = new Player(400-16, 400-16, floor);
         player.setSpeed(speed);
 
-
-
         player.setImg(Images.list.get("player_front"));
         addKeyListener(player);
         addMouseListener(player);
         addSprite(player);
+
+        gui = new GUI(player);
+        add(gui);
 
         cursor = new Rectangle(0, 0, 10, 10);
 
@@ -65,11 +65,13 @@ public class GraphicsPanel extends JPanel {
         Timer update = new Timer(1000/60, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                grabFocus();
                 repaint();
             }
         });
 
         update.start();
+
 
     }
 
@@ -79,6 +81,7 @@ public class GraphicsPanel extends JPanel {
         translate[0] = player.getTransX();
         translate[1] = player.getTransY();
         g2.translate(translate[0], translate[1]);
+        gui.update(translate);
 
         Point mousePosition = getMousePosition();
         Point mouse = (mousePosition != null)?mousePosition:new Point(400, 400);
@@ -159,7 +162,6 @@ public class GraphicsPanel extends JPanel {
 
     public void grabFocus(){
         super.grabFocus();
-        System.out.println("focused");
     }
 
     public static double getAngle(Point a, Point b){
