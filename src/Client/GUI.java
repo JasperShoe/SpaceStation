@@ -4,12 +4,10 @@ import javax.swing.*;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.MatteBorder;
 import Characters.Player;
+import World.Gun;
 
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
+import java.awt.event.*;
 import java.util.ArrayList;
 
 public class GUI extends JPanel {
@@ -21,9 +19,9 @@ public class GUI extends JPanel {
 
     private JPanel mainPanel, gunSlotPanel, reloadAnimation;
 
-    private JLabel healthBar, healthBarRed, healthBarGreen;
+    private JLabel mainPanelOverlay, healthBar, healthBarRed, healthBarGreen;
 
-    private JButton openInventory, openSkillTree, primaryGunSlot;
+    private JButton openInventory, openUpgrades, primaryGunSlot;
 
     private MatteBorder border = new MatteBorder(1, 1, 1, 1, new Color(0 ,0 ,0));
 
@@ -68,15 +66,13 @@ public class GUI extends JPanel {
                     gunSlotPanel.setOpaque(true);
                     gunSlotPanel.setVisible(true);
                 } else {
-                    setOpaque(false);
-                    invOpen = false;
-                    gunSlotPanel.setOpaque(false);
-                    gunSlotPanel.setVisible(false);
+                    closeInv();
                 }
             }
         });
-        openSkillTree = new JButton("ST");
-        openSkillTree.addActionListener(new ActionListener() {
+        openUpgrades = new JButton();
+        openUpgrades.setIcon(new ImageIcon(Images.list.get("icon_upgrades")));
+        openUpgrades.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if(!stOpen) {
@@ -92,7 +88,7 @@ public class GUI extends JPanel {
         });
 
         buttons.add(openInventory);
-        buttons.add(openSkillTree);
+        buttons.add(openUpgrades);
 
         pad = 10;
         scale = 30;
@@ -102,16 +98,15 @@ public class GUI extends JPanel {
         h = (3+numGuns)*pad + (1+2*numGuns)*scale;
         setBounds(x, y, w, h);
 
-        mainPanel = new JPanel(){
-            @Override
-            public void paintComponent(Graphics g){
-                Graphics2D g2 = (Graphics2D) g;
-                g2.drawImage(Images.list.get("gui_main_panel"), null, 0, 0);
-            }
-        };
+        mainPanel = new JPanel();
         mainPanel.setBounds(0, 0, w, 3*pad + 3*scale);
         mainPanel.setLayout(null);
         mainPanel.setOpaque(true);
+        mainPanel.setBackground(new Color(214, 214, 214));
+
+        mainPanelOverlay = new JLabel();
+        mainPanelOverlay.setBounds(mainPanel.getBounds());
+        mainPanelOverlay.setIcon(new ImageIcon(Images.list.get("gui_main_panel_overlay")));
 
         healthBar = new JLabel(Integer.toString(player.getHealth()), SwingConstants.CENTER);
         healthBar.setFont(font);
@@ -195,11 +190,12 @@ public class GUI extends JPanel {
 
                 @Override
                 public void mouseReleased(MouseEvent e) {
-                    if ((e.getX() > gunSlotPanel.getX() + gunSlotPanel.getWidth() || e.getY() > gunSlotPanel.getY() + gunSlotPanel.getHeight())) {
-                        if (player.getInventory().indexOf(player.getInventory().get(gunSlots.indexOf(g))) != 0 && gunSlots.indexOf(g) < player.getInventory().size() && player.getInventory().size() > 1) {
+                    if ((e.getX() > gunSlotPanel.getX() + gunSlotPanel.getWidth() || e.getY() > gunSlotPanel.getY() + gunSlotPanel.getHeight()) && gunSlots.indexOf(g) < player.getInventory().size()) {
+                        if (currentGun != 0 && player.getInventory().size() > 1) {
                             player.removeInventory(gunSlots.indexOf(g));
                             player.equipGun(player.getInventory().get(0));
                         }
+
                     }
                 }
 
@@ -221,7 +217,7 @@ public class GUI extends JPanel {
             }
         }
         add(gunSlotPanel);
-
+        mainPanel.add(mainPanelOverlay);
         mainPanel.add(healthBar);
         mainPanel.add(healthBarGreen);
         mainPanel.add(healthBarRed);
@@ -298,5 +294,12 @@ public class GUI extends JPanel {
 
     public void setTranslate(int[] translate) {
         this.translate = translate;
+    }
+
+    public void closeInv(){
+        setOpaque(false);
+        invOpen = false;
+        gunSlotPanel.setOpaque(false);
+        gunSlotPanel.setVisible(false);
     }
 }

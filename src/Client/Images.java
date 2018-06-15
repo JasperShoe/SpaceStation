@@ -36,9 +36,10 @@ public class Images {
                 "gun_sniper",
                 "bullet_purple",
                 "gun_p90",
-                "gui_main_panel",
                 "icon_inventory",
-                "gun_pistol"
+                "gun_pistol",
+                "icon_upgrades",
+                "gui_main_panel_overlay"
         };
         for(String s : loader){
             list.put(s, readImg(s));
