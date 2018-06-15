@@ -142,7 +142,7 @@ public class GUI extends JPanel {
 
         gunSlotPanel = new JPanel();
         gunSlotPanel.setBorder(new CompoundBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.BLACK), BorderFactory.createMatteBorder(1, 1, 1, 1, new Color(0, 150,104))));
-        gunSlotPanel.setBackground(new Color(214, 214, 214));
+        gunSlotPanel.setBackground(new Color(190, 190, 190));
         gunSlotPanel.setBounds(0, mainPanel.getHeight(), w, h - mainPanel.getHeight());
         gunSlotPanel.setLayout(null);
         gunSlotPanel.setVisible(false);
