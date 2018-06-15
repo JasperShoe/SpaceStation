@@ -88,7 +88,7 @@ public class Gun extends Sprite {
 
     public void update(Character character, double mouseAngle) {
 
-        translate(character.getX() - getX(), character.getY() - getY() + 2);
+        translate(2 + character.getX() - getX(), 7 + character.getY() - getY());
         if(mouseAngle > -75 && mouseAngle < 105){
             foreground = true;
             setHorizFlip(false);
