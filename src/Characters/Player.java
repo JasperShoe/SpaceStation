@@ -31,6 +31,7 @@ public class Player extends Character implements KeyListener, MouseListener{
         super(x, y, 100, 2, floor);
         inv_index = 0;
         inventory = new ArrayList<>();
+        inventory.add(Gun.get("pistol"));
         inventory.add(Gun.get("uzi"));
         inventory.add(Gun.get("mp5"));
         inventory.add(Gun.get("laser"));

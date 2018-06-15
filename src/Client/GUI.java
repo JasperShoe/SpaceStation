@@ -56,7 +56,8 @@ public class GUI extends JPanel {
         stOpen = false;
 
         buttons = new ArrayList<>();
-        openInventory = new JButton("INV");
+        openInventory = new JButton();
+        openInventory.setIcon(new ImageIcon(Images.list.get("icon_inventory")));
         openInventory.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -195,7 +196,7 @@ public class GUI extends JPanel {
                 @Override
                 public void mouseReleased(MouseEvent e) {
                     if ((e.getX() > gunSlotPanel.getX() + gunSlotPanel.getWidth() || e.getY() > gunSlotPanel.getY() + gunSlotPanel.getHeight())) {
-                        if (gunSlots.indexOf(g) < player.getInventory().size() && player.getInventory().size() > 1) {
+                        if (player.getInventory().indexOf(player.getInventory().get(gunSlots.indexOf(g))) != 0 && gunSlots.indexOf(g) < player.getInventory().size() && player.getInventory().size() > 1) {
                             player.removeInventory(gunSlots.indexOf(g));
                             player.equipGun(player.getInventory().get(0));
                         }

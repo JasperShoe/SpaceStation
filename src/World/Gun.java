@@ -20,11 +20,12 @@ public class Gun extends Sprite {
     public static HashMap<String, Gun> list;
     static {
         list = new HashMap<>();
-        list.put("mp5", new Gun("mp5", "bullet_red", 5, 10, 500, 3, 20, Integer.MAX_VALUE, 4));
-        list.put("uzi", new Gun("uzi", "bullet_yellow", 3, 10, 350, 10, 50, 350, 2));
+        list.put("pistol", new Gun("pistol", "bullet_yellow", 2, 10, 400, 6, 8, Integer.MAX_VALUE, 3));
+        list.put("mp5", new Gun("mp5", "bullet_red", 5, 10, 500, 3, 20, 60, 4));
+        list.put("uzi", new Gun("uzi", "bullet_yellow", 3, 10, 350, 15, 50, 350, 2));
         list.put("laser", new Gun("laser", "bullet_purple", 10, 10, 800, 2, 6, 50, 2));
         list.put("sniper", new Gun("sniper", "bullet_yellow", 15, 15, 1000, 1, 3, 25, 1));
-        list.put("p90", new Gun("p90", "bullet_red", 4, 10, 500, 0, 20, 350, 2));
+        list.put("p90", new Gun("p90", "bullet_red", 4, 10, 500, 10, 20, 350, 2));
     }
 
     private int bulletSpeed, bulletDamage, bulletRange, fireRate, clipSize, clip, reloadTime, magazine, fullMag;
