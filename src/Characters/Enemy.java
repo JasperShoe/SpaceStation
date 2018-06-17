@@ -2,19 +2,23 @@ package Characters;
 
 import Client.GraphicsPanel;
 import Client.Images;
+import World.Explosion;
 import World.Floor;
 import World.Gun;
+import World.Pickup;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Enemy extends Character {
 
     private AI controller;
     private Timer attack;
+    private ArrayList<Pickup> pickups;
 
     public static HashMap<String, Enemy> list;
     static{
@@ -27,7 +31,7 @@ public class Enemy extends Character {
                     }
 
                     @Override
-                    public void move(Sprite moving, Player player) {
+                    public void move(Character moving, Player player) {
                         double relAngle = Math.toRadians(GraphicsPanel.getAngle(moving.getCenter(), player.getCenter()));
                         moving.translate((int)(Math.cos(relAngle)*moving.getSpeed()), (int)(Math.sin(relAngle)*moving.getSpeed()));
                     }
@@ -50,6 +54,18 @@ public class Enemy extends Character {
                         });
 
                     }
+
+                    @Override
+                    public void customize(Enemy enemy) {
+                        double dropChance = .05;
+                        if(Math.random() < .1){
+                            enemy.equipGun(Gun.getRandom());
+                            dropChance = 1;
+                        }
+                        if(Math.random() < dropChance) {
+                            enemy.addPickup(new Pickup(enemy.getEquipped(), enemy.getFloor()));
+                        }
+                    }
                 })
                 );
         list.put("sniper", new Enemy(50, 3, Gun.get("sniper"), new AI() {
@@ -59,7 +75,7 @@ public class Enemy extends Character {
             }
 
             @Override
-            public void move(Sprite moving, Player player) {
+            public void move(Character moving, Player player) {
                 if(moving.getDistance(player) < 240){
                     double relAngle = Math.toRadians(GraphicsPanel.getAngle(moving.getCenter(), player.getCenter()));
                     moving.translate((int)(-Math.cos(relAngle)*moving.getSpeed()), (int)(-Math.sin(relAngle)*moving.getSpeed()));
@@ -81,13 +97,48 @@ public class Enemy extends Character {
                     }
                 });
             }
+
+            @Override
+            public void customize(Enemy enemy) {
+                if(Math.random() < .1){
+                    enemy.addPickup(new Pickup(enemy.getEquipped(), enemy.getFloor()));
+                }
+            }
+        }));
+
+        list.put("psycho", new Enemy(40, 3, null, new AI() {
+            @Override
+            public Point setGoal(Rectangle bounds) {
+                return null;
+            }
+
+            @Override
+            public void customize(Enemy enemy) {
+
+            }
+
+            @Override
+            public void move(Character moving, Player player) {
+                double relAngle = Math.toRadians(GraphicsPanel.getAngle(moving.getCenter(), player.getCenter()));
+                moving.translate((int)(Math.cos(relAngle)*moving.getSpeed()), (int)(Math.sin(relAngle)*moving.getSpeed()));
+                if(moving.getDistance(player) < 60){
+                    Explosion explosion = new Explosion(20, 150);
+                    explosion.init(moving.getX(), moving.getY(), player.getFloor());
+                    moving.kill();
+                }
+            }
+
+            @Override
+            public Timer attack(Character attacker) {
+                return null;
+            }
         }));
     }
 
     public Enemy(int health, int speed, Gun gun, AI controller){
         super(0, 0, health, speed, null);
         setImg(Images.list.get("enemy_front"));
-
+        pickups = new ArrayList<>();
         this.controller = controller;
 
         if(gun!=null){
@@ -96,6 +147,7 @@ public class Enemy extends Character {
 
 
         attack = controller.attack(this);
+        controller.customize(this);
 
     }
 
@@ -103,9 +155,13 @@ public class Enemy extends Character {
         setX(x);
         setY(y);
         setFloor(floor);
-        equipGun(getEquipped());
+        if(getEquipped()!= null){
+            equipGun(getEquipped());
+        }
         getFloor().addEnemy(this);
-        attack.start();
+        if(attack!=null){
+            attack.start();
+        }
     }
 
     public void update(Graphics2D g2, Player player, double angle){
@@ -123,17 +179,38 @@ public class Enemy extends Character {
 
     @Override
     public void kill() {
-        getEquipped().stop();
-        attack.stop();
+        stopAttack();
         getFloor().removeEnemy(this);
+        for (int i = 0; i < pickups.size(); i++) {
+            pickups.get(i).init(getX() + 20 * i, getY() + 20 * i, getFloor());
+        }
+    }
+
+    public void stopAttack(){
+        if(getEquipped()!=null){
+            getEquipped().stop();
+        }
+        if(attack!=null){
+            attack.stop();
+        }
     }
 
     @Override
     public Enemy clone() {
-        return new Enemy(getMaxHealth(), getSpeed(), Gun.get(getEquipped().getName()), getController());
+        Gun equipped = (getEquipped()==null)?null:Gun.get(getEquipped().getName());
+        return new Enemy(getMaxHealth(), getSpeed(), equipped, getController());
     }
 
     public static Enemy get(String key){
         return list.get(key).clone();
+    }
+
+    public void addPickup(Pickup pickup){
+        pickups.add(pickup);
+    }
+
+    public void scaleHealth(int tier){
+        double scale = .5 * tier;
+        setMaxHealth((int)(getMaxHealth() * scale));
     }
 }

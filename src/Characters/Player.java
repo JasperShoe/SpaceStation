@@ -5,6 +5,7 @@ import Client.Images;
 import World.Cell;
 import World.Floor;
 import World.Gun;
+import World.Pickup;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
@@ -32,11 +33,11 @@ public class Player extends Character implements KeyListener, MouseListener{
         inv_index = 0;
         inventory = new ArrayList<>();
         inventory.add(Gun.get("pistol"));
-        inventory.add(Gun.get("uzi"));
-        inventory.add(Gun.get("mp5"));
-        inventory.add(Gun.get("laser"));
-        inventory.add(Gun.get("sniper"));
-        inventory.add(Gun.get("p90"));
+//        inventory.add(Gun.get("uzi"));
+//        inventory.add(Gun.get("mp5"));
+//        inventory.add(Gun.get("laser"));
+//      inventory.add(Gun.get("sniper"));
+//        inventory.add(Gun.get("p90"));
         equipGun(inventory.get(inv_index));
 
 
@@ -109,6 +110,18 @@ public class Player extends Character implements KeyListener, MouseListener{
             switch_gun();
         } else if(keyCode == KeyEvent.VK_R){
             getEquipped().reload();
+        }
+        else if(keyCode == KeyEvent.VK_SPACE){
+            for(int i = getFloor().getPickups().size() - 1; i >= 0; i--){
+                Pickup pickup = getFloor().getPickups().get(i);
+                if(pickup.getBoundingRectangle().intersects(GraphicsPanel.cursor)){
+                    inventory.add(pickup.getPickup());
+                    getFloor().removePickup(pickup);
+                }
+            }
+        }
+        else if(keyCode==KeyEvent.VK_I){
+            getFloor().getParent().getGui().toggleInv();
         }
 
     }

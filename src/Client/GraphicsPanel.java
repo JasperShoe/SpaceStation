@@ -19,7 +19,7 @@ public class GraphicsPanel extends JPanel {
     private int speed = 2;
     private Floor floor;
 
-    private Rectangle cursor;
+    public static Rectangle cursor;
     private int[] translate = {0, 0};
 
     private ArrayList<Sprite> moving;
@@ -34,7 +34,7 @@ public class GraphicsPanel extends JPanel {
         setFocusable(true);
         setBackground(Color.BLACK);
 
-        floor = new Floor(this);
+        floor = new Floor(this, 1);
 
         player = new Player(400-16, 400-16, floor);
         player.setSpeed(speed);
@@ -103,9 +103,10 @@ public class GraphicsPanel extends JPanel {
             player.draw(g2);
         }
 
-        for(Enemy enemy : floor.getEnemies()){
+        for(int i = floor.getEnemies().size() - 1; i >=0; i--){
+            Enemy enemy = floor.getEnemies().get(i);
             enemy.update(g2, player, enemy.getPlayerAngle(player));
-            if(!enemy.getEquipped().isForeground()){
+            if(enemy.getEquipped()== null || !enemy.getEquipped().isForeground()){
                 enemy.draw(g2);
             }
             if(enemy.intersects(player.getBoundingRectangle())){
@@ -146,7 +147,28 @@ public class GraphicsPanel extends JPanel {
             }
         }
 
+        for(Pickup pickup : floor.getPickups()){
+            pickup.draw(g2);
+        }
 
+        for (int i = floor.getExplosions().size()-1; i >=0 ; i--) {
+            Explosion explosion = floor.getExplosions().get(i);
+            if(explosion.getW() < explosion.getRange()){
+                explosion.draw(g2);
+                if(explosion.intersects(player.getBoundingRectangle())){
+                    player.damage(explosion.getDamage());
+                }
+                for (int j = floor.getEnemies().size() - 1; j >= 0; j--) {
+                    Enemy enemy = floor.getEnemies().get(j);
+                    if(explosion.intersects(enemy.getBoundingRectangle())){
+                        enemy.damage(explosion.getDamage());
+                    }
+                }
+            }
+            else{
+                floor.removeExplosion(explosion);
+            }
+        }
 
         //        g2.draw(cursor);
 
@@ -167,5 +189,9 @@ public class GraphicsPanel extends JPanel {
 
     public static double getAngle(Point a, Point b){
         return Math.toDegrees(Math.atan2(b.y - a.y, b.x - a.x));
+    }
+
+    public GUI getGui() {
+        return gui;
     }
 }

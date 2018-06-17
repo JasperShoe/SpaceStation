@@ -9,7 +9,8 @@ import java.awt.*;
 public interface AI {
 
     Point setGoal(Rectangle bounds);
-    void move(Sprite moving, Player player);
+    void customize(Enemy enemy);
+    void move(Character moving, Player player);
     Timer attack(Character attacker);
 
 }

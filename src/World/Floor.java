@@ -12,6 +12,8 @@ import java.util.HashMap;
 
 public class Floor {
 
+    private int tier;
+
     private Cell[][] map; //cells on floor
     private Point[][] intersections; //corners of all the cells; walls connect two intersections
     private ArrayList<Wall> walls, vertical, horizontal;
@@ -21,11 +23,15 @@ public class Floor {
     private HashMap<String, String> oppositesDirections;
     private ArrayList<Bullet> bullets;
     private ArrayList<Enemy> enemies;
+    private ArrayList<Pickup> pickups;
+    private ArrayList<Explosion> explosions;
     private GraphicsPanel parent;
-    public Floor(GraphicsPanel parent){
+    public Floor(GraphicsPanel parent, int tier){
         this.parent = parent;
         bullets = new ArrayList<>();
         enemies = new ArrayList<>();
+        pickups = new ArrayList<>();
+        explosions = new ArrayList<>();
 
         oppositesDirections = new HashMap<>();
         oppositesDirections.put("Up","Down");
@@ -57,7 +63,7 @@ public class Floor {
         for(int i = 0; i < map.length; i++){
             addIntersection(i+1, 0, new Point(0, (i + 1) * Cell.defaultHeight));
             for (int j = 0; j < map[0].length; j++) {
-                map[i][j] = new Cell(j * Cell.defaultWidth, i * Cell.defaultHeight);
+                map[i][j] = new Cell(j * Cell.defaultWidth, i * Cell.defaultHeight, tier);
                 addIntersection(i+1, j+1, new Point((j+1) * Cell.defaultWidth, (i+1) * Cell.defaultHeight));
             }
         }
@@ -286,5 +292,37 @@ public class Floor {
 
     public boolean onMap(int r, int c){
         return (r >= 0 && c >= 0 && r < map.length && c < map[0].length);
+    }
+
+    public void addPickup(Pickup pickup){
+        pickups.add(pickup);
+    }
+
+    public void removePickup(Pickup pickup){
+        pickups.remove(pickup);
+    }
+
+    public ArrayList<Pickup> getPickups() {
+        return pickups;
+    }
+
+    public void addExplosion(Explosion explosion){
+        explosions.add(explosion);
+    }
+
+    public void removeExplosion(Explosion explosion){
+        explosions.remove(explosion);
+    }
+
+    public ArrayList<Explosion> getExplosions() {
+        return explosions;
+    }
+
+    public GraphicsPanel getParent() {
+        return parent;
+    }
+
+    public int getTier() {
+        return tier;
     }
 }

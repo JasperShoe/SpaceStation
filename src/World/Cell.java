@@ -18,10 +18,11 @@ public class Cell {
     private HashMap<String, Boolean> walls;
     private HashMap<String, Cell> neighbors;
     private ArrayList<Enemy> enemies;
+    private int tier;
 
-    public Cell(int x, int y){
+    public Cell(int x, int y, int tier){
         coords = new Point(x, y);
-
+        this.tier = tier;
         enemies = new ArrayList<>();
         addEnemies((int)(Math.random() * 4 + 2));
         revealed = false;
@@ -128,7 +129,9 @@ public class Cell {
 
     public void addEnemies(int max){
         for (int i = 0; i < (int)(Math.random() * max); i++) {
-            enemies.add( Enemy.get((String)(Enemy.list.keySet().toArray()[(int)(Math.random() * Enemy.list.keySet().size())])));
+            Enemy toAdd = Enemy.get((String)(Enemy.list.keySet().toArray()[(int)(Math.random() * Enemy.list.keySet().size())]));
+            toAdd.scaleHealth(tier);
+            enemies.add(toAdd);
         }
     }
 }

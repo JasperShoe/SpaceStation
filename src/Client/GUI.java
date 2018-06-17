@@ -59,15 +59,7 @@ public class GUI extends JPanel {
         openInventory.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if(!invOpen) {
-                    setOpaque(true);
-                    invOpen = true;
-                    stOpen = false;
-                    gunSlotPanel.setOpaque(true);
-                    gunSlotPanel.setVisible(true);
-                } else {
-                    closeInv();
-                }
+                toggleInv();
             }
         });
         openUpgrades = new JButton();
@@ -167,7 +159,7 @@ public class GUI extends JPanel {
             }
             g.setIcon(new ImageIcon(player.getInventory().get(gunSlots.indexOf(g)).getImg()));
             g.setFont(font);
-            g.setText(player.getInventory().get(gunSlots.indexOf(g)).getClip() + "/" + player.getInventory().get(gunSlots.indexOf(g)).getClipSize());
+            g.setText(player.getInventory().get(gunSlots.indexOf(g)).getClip() + "/" + player.getInventory().get(gunSlots.indexOf(g)).getMagazineText());
             g.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
@@ -243,7 +235,7 @@ public class GUI extends JPanel {
         currentGun = gunIndex;
         for(int i = 0; i < gunSlots.size(); i++){
             gunSlots.get(i).setIcon(new ImageIcon(player.getInventory().get(gunIndex).getImg()));
-            gunSlots.get(i).setText(Integer.toString(player.getInventory().get(gunIndex).getClip()) + "/" + player.getInventory().get(gunIndex).getClipSize());
+            gunSlots.get(i).setText(Integer.toString(player.getInventory().get(gunIndex).getClip()) + "/" + player.getInventory().get(gunIndex).getMagazineText());
 
             if(i < player.getInventory().size()) {
                 if (gunIndex >= player.getInventory().size() - 1) {
@@ -296,10 +288,11 @@ public class GUI extends JPanel {
         this.translate = translate;
     }
 
-    public void closeInv(){
-        setOpaque(false);
-        invOpen = false;
-        gunSlotPanel.setOpaque(false);
-        gunSlotPanel.setVisible(false);
+    public void toggleInv(){
+        setOpaque(!isOpaque());
+        invOpen = !invOpen;
+        stOpen = !stOpen;
+        gunSlotPanel.setOpaque(!gunSlotPanel.isOpaque());
+        gunSlotPanel.setVisible(!gunSlotPanel.isVisible());
     }
 }

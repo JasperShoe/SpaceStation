@@ -49,10 +49,16 @@ public abstract class Character extends Sprite {
 
     public void setHealth(int health) {
         this.health = health;
+        if(health > maxHealth){
+            setMaxHealth(health);
+        }
     }
 
     public void setMaxHealth(int maxHealth) {
         this.maxHealth = maxHealth;
+        if(health > maxHealth){
+            health = maxHealth;
+        }
     }
 
     public void damage(int damage){
@@ -107,12 +113,13 @@ public abstract class Character extends Sprite {
     }
 
     public void update(Graphics2D g2, double angle){
-        getEquipped().update(this, Math.toDegrees(angle));
-        if(getEquipped().isForeground()){
-            draw(g2);
+        if(getEquipped()!= null) {
+            getEquipped().update(this, Math.toDegrees(angle));
+            if (getEquipped().isForeground()) {
+                draw(g2);
+            }
+            getEquipped().draw(g2);
         }
-        getEquipped().draw(g2);
-
 
         super.update();
     }
