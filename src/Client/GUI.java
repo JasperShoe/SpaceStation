@@ -162,6 +162,7 @@ public class GUI extends JPanel {
                 gunSlotY += gunSlotH + pad;
             }
             g.setPreferredSize(new Dimension(g.getBounds().width, g.getBounds().height));
+            g.setBorderPainted(false);
             g.setFont(font);
             g.addActionListener(new ActionListener() {
                 @Override
