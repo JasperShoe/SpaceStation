@@ -120,7 +120,7 @@ public class Player extends Character implements KeyListener, MouseListener{
                 }
             }
         }
-        else if(keyCode==KeyEvent.VK_I){
+        else if(keyCode==KeyEvent.VK_E){
             getFloor().getParent().getGui().toggleInv();
         }
 

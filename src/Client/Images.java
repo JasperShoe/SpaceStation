@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Random;
 
 public class Images {
 
@@ -29,7 +30,12 @@ public class Images {
                 "gun_mp5",
                 "cursor",
                 "bullet_red",
-                "floor",
+                "floor_0",
+                "floor_1",
+                "floor_2",
+                "floor_3",
+                "floor_4",
+                "floor_5",
                 "bullet_yellow",
                 "gun_uzi",
                 "gun_laser",
@@ -39,14 +45,33 @@ public class Images {
                 "icon_inventory",
                 "gun_pistol",
                 "icon_upgrades",
-                "gui_main_panel_overlay"
+                "gui_main_panel_overlay",
+                "gui_gunslot_underlay"
         };
         for(String s : loader){
             list.put(s, readImg(s));
         }
-        list.put("wall_front", createCombinedImage(list.get("wall_panel"), 1, 5, new ArrayList(), new ArrayList(){{add(2);}}));
-        list.put("wall_external_front", createCombinedImage(list.get("wall_panel"), 1, 5, new ArrayList(), new ArrayList()));
-        list.put("floor_tiled", createCombinedImage(list.get("floor"), Cell.defaultHeight/list.get("floor").getHeight(), Cell.defaultWidth/list.get("floor").getWidth(), new ArrayList(), new ArrayList()));
+        list.put("wall_front", createCombinedImage(new ArrayList<BufferedImage>(){{add(list.get("wall_panel"));}}, 1, 5, new ArrayList(), new ArrayList<Integer>(){{add(100);}}, new ArrayList(){{add(2);}}, 0, 0));
+        list.put("wall_external_front", createCombinedImage(new ArrayList<BufferedImage>(){{add(list.get("wall_panel"));}}, 1, 5, new ArrayList<Integer>(){{add(100);}}, new ArrayList(), new ArrayList(), 0, 0));
+        list.put("floor_tiled", createCombinedImage(new ArrayList<BufferedImage>(){
+            {
+            add(list.get("floor_0"));
+            add(list.get("floor_1"));
+            add(list.get("floor_2"));
+            add(list.get("floor_3"));
+            add(list.get("floor_4"));
+            add(list.get("floor_5"));
+            }
+        }, Cell.defaultHeight/list.get("floor_0").getHeight(), Cell.defaultWidth/list.get("floor_0").getWidth(), new ArrayList<Integer>(){
+            {
+             add(20);
+             add(20);
+             add(20);
+             add(20);
+             add(15);
+             add(5);
+            }
+        }, new ArrayList(), new ArrayList(), 0, 0));
     }
 
     public static URL buildImageFile(String file){
@@ -54,8 +79,8 @@ public class Images {
         return classLoader.getResource("res/" + file + ".png");
     }
 
-    public static BufferedImage createCombinedImage(BufferedImage img, int r, int c, ArrayList rExceptions, ArrayList cExceptions){
-        int width = c * img.getWidth(), height = r * img.getHeight();
+    public static BufferedImage createCombinedImage(ArrayList<BufferedImage> images, int r, int c, ArrayList<Integer> percentages, ArrayList rExceptions, ArrayList cExceptions, int xPad, int yPad){
+        int width = c * images.get(0).getWidth(), height = r * images.get(0).getHeight();
         BufferedImage newImage = new BufferedImage(width,height, BufferedImage.TYPE_INT_ARGB);
         Graphics2D g2 = newImage.createGraphics();
         Color oldColor = g2.getColor();
@@ -63,11 +88,27 @@ public class Images {
         g2.fillRect(0, 0, width, height);
         g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER));
         g2.setColor(oldColor);
-        for(int row = 0; row < r; row++){
-            if(!rExceptions.contains(row)) {
-                for (int col = 0; col < c; col++) {
-                    if(!cExceptions.contains(col)){
-                        g2.drawImage(img, null, col*img.getWidth(), row*img.getHeight());
+        if(r == 1 && c == 1){
+            for(BufferedImage img : images){
+                g2.drawImage(img, null, width/2 - img.getWidth()/2 + xPad, height/2 - img.getHeight()/2 + yPad);
+            }
+        } else {
+            for (int row = 0; row < r; row++) {
+                if (!rExceptions.contains(row)) {
+                    for (int col = 0; col < c; col++) {
+                        if (!cExceptions.contains(col)) {
+                            BufferedImage img = images.get(0);
+                            int random = new Random().nextInt(100);
+                            int percent = 0;
+                            for (int i = 0; i < percentages.size(); i++) {
+                                percent += percentages.get(i);
+                                if (random < percent) {
+                                    img = images.get(i);
+                                    break;
+                                }
+                            }
+                            g2.drawImage(img, null, col * img.getWidth(), row * img.getHeight());
+                        }
                     }
                 }
             }

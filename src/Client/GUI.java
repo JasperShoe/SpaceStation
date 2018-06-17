@@ -4,26 +4,28 @@ import javax.swing.*;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.MatteBorder;
 import Characters.Player;
-import World.Gun;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 public class GUI extends JPanel {
-    private int numGuns, pad, scale, w, h, x, y, wX, wY, wW, wH, bX, gunIndex, currentGun;
+    private int numGunSlots, pad, scale, w, h, x, y, gunSlotX, gunSlotY, gunSlotW, gunSlotH, buttonX, gunIndex, currentGun;
 
     private double healthBarGreenW, reloadAnimationH, reloadTimeCount;
 
     private boolean invOpen, stOpen;
 
-    private JPanel mainPanel, gunSlotPanel, reloadAnimation;
+    private JPanel mainPanel, gunSlotsPanel, reloadAnimation;
 
     private JLabel mainPanelOverlay, healthBar, healthBarRed, healthBarGreen;
 
     private JButton openInventory, openUpgrades, primaryGunSlot;
 
     private MatteBorder border = new MatteBorder(1, 1, 1, 1, new Color(0 ,0 ,0));
+
+    private CompoundBorder compoundBorder = new CompoundBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.BLACK), BorderFactory.createMatteBorder(1, 1, 1, 1, new Color(0, 150,104)));
 
     private Player player;
 
@@ -32,6 +34,8 @@ public class GUI extends JPanel {
     private int[] start;
 
     private ArrayList<JButton> buttons, gunSlots;
+
+    private ArrayList<JLabel> gunSlotsUnderlay;
 
     private Font font = new Font("Trebuchet MS", Font.BOLD, 10);
 
@@ -45,8 +49,9 @@ public class GUI extends JPanel {
         start = new int[]{x, y};
         this.player = player;
 
-        numGuns = player.getInventory().size();
+        numGunSlots = 5;
         gunSlots = new ArrayList<>();
+        gunSlotsUnderlay = new ArrayList<>();
         currentGun = 0;
         reloadAnimationH = 0;
 
@@ -71,7 +76,7 @@ public class GUI extends JPanel {
                     setOpaque(false);
                     stOpen = true;
                     invOpen = false;
-                    gunSlotPanel.setVisible(false);
+                    gunSlotsPanel.setVisible(false);
                 } else {
                     setOpaque(false);
                     stOpen = false;
@@ -87,7 +92,7 @@ public class GUI extends JPanel {
         x = 0;
         y = 0;
         w = 200 + buttons.size()*scale + (2+buttons.size())*pad;
-        h = (3+numGuns)*pad + (1+2*numGuns)*scale;
+        h = (3+ numGunSlots)*pad + (1+2* numGunSlots)*scale;
         setBounds(x, y, w, h);
 
         mainPanel = new JPanel();
@@ -116,56 +121,54 @@ public class GUI extends JPanel {
         healthBarGreen.setOpaque(true);
         healthBarGreen.setBackground(Color.GREEN);
 
-        bX = healthBar.getWidth() + healthBar.getX() + pad;
+        buttonX = healthBar.getWidth() + healthBar.getX() + pad;
         for(JButton button : buttons){
             button.setFont(font);
             button.setBorder(border);
-            button.setBounds(bX, pad, scale, scale);
+            button.setBounds(buttonX, pad, scale, scale);
             mainPanel.add(button);
-            bX += pad + button.getWidth();
+            buttonX += pad + button.getWidth();
         }
 
         reloadAnimation = new JPanel();
         reloadAnimation.setBackground(Color.GREEN);
 
-        gunSlotPanel = new JPanel();
-        gunSlotPanel.setBorder(new CompoundBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.BLACK), BorderFactory.createMatteBorder(1, 1, 1, 1, new Color(0, 150,104))));
-        gunSlotPanel.setBackground(new Color(172, 172, 172));
-        gunSlotPanel.setBounds(0, mainPanel.getHeight(), w, h - mainPanel.getHeight());
-        gunSlotPanel.setLayout(null);
-        gunSlotPanel.setVisible(false);
+        gunSlotsPanel = new JPanel();
+        gunSlotsPanel.setBorder(compoundBorder);
+        gunSlotsPanel.setOpaque(false);
+        gunSlotsPanel.setBackground(new Color(172, 172, 172));
+        gunSlotsPanel.setBounds(0, mainPanel.getHeight(), w, h - mainPanel.getHeight());
+        gunSlotsPanel.setLayout(null);
+        gunSlotsPanel.setVisible(false);
 
         primaryGunSlot = new JButton();
         gunSlots.add(primaryGunSlot);
 
-        for(int i = 1; i < numGuns; i++){
+        for(int i = 1; i < numGunSlots; i++){
             gunSlots.add(new JButton());
+            gunSlotsUnderlay.add(new JLabel());
         }
 
-        wX = pad;
-        wY = pad;
-        wW = w-2*pad;
-        wH = 2*scale;
+        gunSlotX = pad;
+        gunSlotY = pad;
+        gunSlotW = w-2*pad;
+        gunSlotH = 2*scale;
         for(JButton g : gunSlots) {
+            g.setBorder(border);
             if(gunSlots.indexOf(g) == 0){
-                g.setBorder(border);
-                g.setBounds(wX, healthBar.getY() + healthBar.getHeight() + pad, wW, wH);
+                g.setBounds(gunSlotX, healthBar.getY() + healthBar.getHeight() + pad, gunSlotW, gunSlotH);
             } else {
-                g.setOpaque(true);
-                g.setBorder(new CompoundBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.BLACK), BorderFactory.createMatteBorder(1, 1, 1, 1, new Color(0, 150,104))));
-                g.setBackground(new Color(214, 214, 214));
-                g.setBounds(wX, wY, wW, wH);
-                wY += wH + pad;
+                g.setBounds(gunSlotX, gunSlotY, gunSlotW, gunSlotH);
+                gunSlotY += gunSlotH + pad;
             }
-            g.setIcon(new ImageIcon(player.getInventory().get(gunSlots.indexOf(g)).getImg()));
+            g.setPreferredSize(new Dimension(g.getBounds().width, g.getBounds().height));
             g.setFont(font);
-            g.setText(player.getInventory().get(gunSlots.indexOf(g)).getClip() + "/" + player.getInventory().get(gunSlots.indexOf(g)).getMagazineText());
             g.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
+                    int targetGun = (currentGun + gunSlots.indexOf(g))%player.getInventory().size();
                     if (gunSlots.indexOf(g) < player.getInventory().size()) {
-                        currentGun = (currentGun + gunSlots.indexOf(g))%player.getInventory().size();
-                        player.equipGun(player.getInventory().get(currentGun));
+                        player.equipGun(player.getInventory().get(targetGun));
                     }
                 }
             });
@@ -182,10 +185,11 @@ public class GUI extends JPanel {
 
                 @Override
                 public void mouseReleased(MouseEvent e) {
-                    if ((e.getX() > gunSlotPanel.getX() + gunSlotPanel.getWidth() || e.getY() > gunSlotPanel.getY() + gunSlotPanel.getHeight()) && gunSlots.indexOf(g) < player.getInventory().size()) {
-                        if (currentGun != 0 && player.getInventory().size() > 1) {
-                            player.removeInventory(gunSlots.indexOf(g));
-                            player.equipGun(player.getInventory().get(0));
+                    if ((e.getX() > gunSlotsPanel.getX() + gunSlotsPanel.getWidth() || e.getY() > gunSlotsPanel.getY() + gunSlotsPanel.getHeight()) && gunSlots.indexOf(g) < player.getInventory().size()) {
+                        int targetGun = (currentGun + gunSlots.indexOf(g))%player.getInventory().size();
+                        if (player.getInventory().size() > 1 && targetGun != 0) {
+                            player.removeInventory(targetGun);
+                            player.equipGun(player.getInventory().get(currentGun));
                         }
 
                     }
@@ -205,10 +209,18 @@ public class GUI extends JPanel {
             if(gunSlots.indexOf(g) == 0) {
                 mainPanel.add(g);
             } else {
-                gunSlotPanel.add(g);
+                gunSlotsPanel.add(g);
             }
         }
-        add(gunSlotPanel);
+
+        for(JLabel l : gunSlotsUnderlay){
+            l.setBounds(gunSlots.get(gunSlotsUnderlay.indexOf(l) + 1).getBounds());
+            l.setIcon(new ImageIcon(Images.list.get("gui_gunslot_underlay")));
+            l.setPreferredSize(new Dimension(gunSlots.get(gunSlotsUnderlay.indexOf(l) + 1).getBounds().width, gunSlots.get(gunSlotsUnderlay.indexOf(l) + 1).getBounds().height));
+            gunSlotsPanel.add(l);
+        }
+        add(gunSlotsPanel);
+
         mainPanel.add(mainPanelOverlay);
         mainPanel.add(healthBar);
         mainPanel.add(healthBarGreen);
@@ -234,18 +246,26 @@ public class GUI extends JPanel {
         gunIndex = player.getInventory().indexOf(player.getEquipped());
         currentGun = gunIndex;
         for(int i = 0; i < gunSlots.size(); i++){
-            gunSlots.get(i).setIcon(new ImageIcon(player.getInventory().get(gunIndex).getImg()));
-            gunSlots.get(i).setText(Integer.toString(player.getInventory().get(gunIndex).getClip()) + "/" + player.getInventory().get(gunIndex).getMagazineText());
-
             if(i < player.getInventory().size()) {
-                if (gunIndex >= player.getInventory().size() - 1) {
-                    gunIndex = 0;
+                if (i != 0) {
+                    gunSlots.get(i).setIcon(new ImageIcon(Images.createCombinedImage(new ArrayList<BufferedImage>() {{
+                        add(player.getInventory().get(gunIndex).getImg());
+                    }}, 1, 1, null, null, null, 0, 0)));
                 } else {
-                    gunIndex++;
+                    gunSlots.get(i).setIcon(new ImageIcon(player.getEquipped().getImg()));
                 }
-            } else {
-                gunSlots.get(i).setIcon(null);
-                gunSlots.get(i).setText(null);
+                gunSlots.get(i).setText(Integer.toString(player.getInventory().get(gunIndex).getClip()) + "/" + player.getInventory().get(gunIndex).getClipSize());
+
+                if (i < player.getInventory().size()) {
+                    if (gunIndex >= player.getInventory().size() - 1) {
+                        gunIndex = 0;
+                    } else {
+                        gunIndex++;
+                    }
+                } else {
+                    gunSlots.get(i).setIcon(null);
+                    gunSlots.get(i).setText(null);
+                }
             }
         }
 
@@ -292,7 +312,7 @@ public class GUI extends JPanel {
         setOpaque(!isOpaque());
         invOpen = !invOpen;
         stOpen = !stOpen;
-        gunSlotPanel.setOpaque(!gunSlotPanel.isOpaque());
-        gunSlotPanel.setVisible(!gunSlotPanel.isVisible());
+        gunSlotsPanel.setOpaque(!gunSlotsPanel.isOpaque());
+        gunSlotsPanel.setVisible(!gunSlotsPanel.isVisible());
     }
 }

@@ -98,6 +98,15 @@ public class GraphicsPanel extends JPanel {
             }
         }
 
+        for(Wall wall : floor.getWalls()){
+            wall.draw(g2);
+            for(Sprite sprite : moving){
+                if(wall.intersects(sprite.getBoundingRectangle())){
+                    wall.collide(sprite);
+                }
+            }
+        }
+
         player.update(g2, mouse);
         if(!player.getEquipped().isForeground()){
             player.draw(g2);
