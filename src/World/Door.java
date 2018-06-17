@@ -41,7 +41,7 @@ public class Door extends Sprite {
     public void draw(Graphics2D g2){
         if(orientation == Wall.HORIZONTAL) {
             if(open) {
-                g2.drawImage(Images.list.get("door_open"), null, getX(), getY() - Images.list.get("door_open").getHeight() + 10);
+                g2.drawImage(Images.list.get("door_opened"), null, getX(), getY() - Images.list.get("door_opened").getHeight() + 10);
             } else {
                 g2.drawImage(Images.list.get("door_closed"), null, getX(), getY() - Images.list.get("door_closed").getHeight() + 10);
             }

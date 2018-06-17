@@ -45,7 +45,11 @@ public class Wall extends Sprite {
                 }
             } else {
                 if(hasDoor) {
-                    g2.drawImage(Images.list.get("wall_side"), null, getX() - (Images.list.get("wall_side").getWidth() - 10) / 2, getY() - Images.list.get("wall_front").getHeight() + 10);
+                    if(door.isOpen()){
+                        g2.drawImage(Images.list.get("wall_side_opened"), null, getX() - (Images.list.get("wall_side_opened").getWidth() - 10) / 2, getY() - Images.list.get("wall_front").getHeight() + 10);
+                    } else {
+                        g2.drawImage(Images.list.get("wall_side_closed"), null, getX() - (Images.list.get("wall_side_closed").getWidth() - 10) / 2, getY() - Images.list.get("wall_front").getHeight() + 10);
+                    }
                 } else {
                     g2.drawImage(Images.list.get("wall_external_side"), null, getX() - (Images.list.get("wall_external_side").getWidth() - 10) / 2, getY() - Images.list.get("wall_front").getHeight() + 10);
                 }
