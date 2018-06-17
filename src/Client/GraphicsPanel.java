@@ -36,7 +36,7 @@ public class GraphicsPanel extends JPanel {
 
         floor = new Floor(this, 1);
 
-        player = new Player(400-16, 400-16, floor);
+        player = new Player(400-16, 400-16, floor, this);
         player.setSpeed(speed);
 
         player.setImg(Images.list.get("player_front"));
@@ -200,7 +200,7 @@ public class GraphicsPanel extends JPanel {
         return Math.toDegrees(Math.atan2(b.y - a.y, b.x - a.x));
     }
 
-    public GUI getGui() {
+    public GUI getGUI() {
         return gui;
     }
 }

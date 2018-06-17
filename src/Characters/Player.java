@@ -2,7 +2,6 @@ package Characters;
 
 import Client.GraphicsPanel;
 import Client.Images;
-import World.Cell;
 import World.Floor;
 import World.Gun;
 import World.Pickup;
@@ -25,22 +24,18 @@ public class Player extends Character implements KeyListener, MouseListener{
     //3 is down
 
     private ArrayList<Gun> inventory;
-    int inv_index;
 
+    private int inv_index;
 
-    public Player(int x, int y, Floor floor) {
+    private GraphicsPanel graphicsPanel;
+
+    public Player(int x, int y, Floor floor, GraphicsPanel graphicsPanel) {
         super(x, y, 100, 2, floor);
         inv_index = 0;
         inventory = new ArrayList<>();
         inventory.add(Gun.get("pistol"));
-//        inventory.add(Gun.get("uzi"));
-//        inventory.add(Gun.get("mp5"));
-//        inventory.add(Gun.get("laser"));
-//      inventory.add(Gun.get("sniper"));
-//        inventory.add(Gun.get("p90"));
         equipGun(inventory.get(inv_index));
-
-
+        this.graphicsPanel = graphicsPanel;
     }
 
 
@@ -114,14 +109,14 @@ public class Player extends Character implements KeyListener, MouseListener{
         else if(keyCode == KeyEvent.VK_SPACE){
             for(int i = getFloor().getPickups().size() - 1; i >= 0; i--){
                 Pickup pickup = getFloor().getPickups().get(i);
-                if(pickup.getBoundingRectangle().intersects(GraphicsPanel.cursor)){
+                if(pickup.getBoundingRectangle().intersects(GraphicsPanel.cursor) && inventory.size() < graphicsPanel.getGUI().getNumGunSlots()){
                     inventory.add(pickup.getPickup());
                     getFloor().removePickup(pickup);
                 }
             }
         }
-        else if(keyCode==KeyEvent.VK_E){
-            getFloor().getParent().getGui().toggleInv();
+        else if(keyCode==KeyEvent.VK_I){
+            getFloor().getParent().getGUI().toggleInv();
         }
 
     }

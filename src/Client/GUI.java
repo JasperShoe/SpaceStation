@@ -256,16 +256,14 @@ public class GUI extends JPanel {
                 }
                 gunSlots.get(i).setText(Integer.toString(player.getInventory().get(gunIndex).getClip()) + "/" + player.getInventory().get(gunIndex).getClipSize());
 
-                if (i < player.getInventory().size()) {
-                    if (gunIndex >= player.getInventory().size() - 1) {
-                        gunIndex = 0;
-                    } else {
-                        gunIndex++;
-                    }
+                if (gunIndex >= player.getInventory().size() - 1) {
+                    gunIndex = 0;
                 } else {
-                    gunSlots.get(i).setIcon(null);
-                    gunSlots.get(i).setText(null);
+                    gunIndex++;
                 }
+            } else {
+                gunSlots.get(i).setIcon(null);
+                gunSlots.get(i).setText(null);
             }
         }
 
@@ -314,5 +312,9 @@ public class GUI extends JPanel {
         stOpen = !stOpen;
         gunSlotsPanel.setOpaque(!gunSlotsPanel.isOpaque());
         gunSlotsPanel.setVisible(!gunSlotsPanel.isVisible());
+    }
+
+    public int getNumGunSlots(){
+        return numGunSlots;
     }
 }
