@@ -102,7 +102,7 @@ public class Player extends Character implements KeyListener, MouseListener{
             moveDown = true;
         }
         else if(keyCode == KeyEvent.VK_Q){
-            switch_gun();
+                switch_gun();
         } else if(keyCode == KeyEvent.VK_R){
             getEquipped().reload();
         }
