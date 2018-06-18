@@ -190,7 +190,8 @@ public class GUI extends JPanel {
                         int targetGun = (currentGun + gunSlots.indexOf(g))%player.getInventory().size();
                         if (player.getInventory().size() > 1 && targetGun != 0) {
                             player.removeInventory(targetGun);
-                            player.equipGun(player.getInventory().get(currentGun));
+                            targetGun = (currentGun + gunSlots.indexOf(g))%player.getInventory().size();
+                            player.equipGun(player.getInventory().get(targetGun));
                         }
 
                     }
@@ -252,10 +253,11 @@ public class GUI extends JPanel {
                     gunSlots.get(i).setIcon(new ImageIcon(Images.createCombinedImage(new ArrayList<BufferedImage>() {{
                         add(player.getInventory().get(gunIndex).getImg());
                     }}, 1, 1, null, null, null, 0, 0)));
+                    gunSlots.get(i).setText(Integer.toString(player.getInventory().get(gunIndex).getClip()) + "/" + player.getInventory().get(gunIndex).getMagazineText());
                 } else {
                     gunSlots.get(i).setIcon(new ImageIcon(player.getEquipped().getImg()));
+                    gunSlots.get(i).setText(Integer.toString(player.getEquipped().getClip()) + "/" + player.getEquipped().getMagazineText());
                 }
-                gunSlots.get(i).setText(Integer.toString(player.getInventory().get(gunIndex).getClip()) + "/" + player.getInventory().get(gunIndex).getClipSize());
 
                 if (gunIndex >= player.getInventory().size() - 1) {
                     gunIndex = 0;
