@@ -68,7 +68,8 @@ public class Enemy extends Character {
                     }
                 })
                 );
-        list.put("sniper", new Enemy(50, 3, Gun.get("sniper"), new AI() {
+
+        list.put("sniper", new Enemy(50, 2, Gun.get("sniper"), new AI() {
             @Override
             public Point setGoal(Rectangle bounds) {
                 return null;
@@ -76,9 +77,13 @@ public class Enemy extends Character {
 
             @Override
             public void move(Character moving, Player player) {
+                double relAngle = Math.toRadians(GraphicsPanel.getAngle(moving.getCenter(), player.getCenter()));
                 if(moving.getDistance(player) < 240){
-                    double relAngle = Math.toRadians(GraphicsPanel.getAngle(moving.getCenter(), player.getCenter()));
-                    moving.translate((int)(-Math.cos(relAngle)*moving.getSpeed()), (int)(-Math.sin(relAngle)*moving.getSpeed()));
+
+                    moving.translate((int) (-Math.cos(relAngle) * moving.getSpeed()), (int) (-Math.sin(relAngle) * moving.getSpeed()));
+                }
+                else if(moving.getDistance(player) > moving.getEquipped().getBulletRange()){
+                    moving.translate((int)(Math.cos(relAngle)*moving.getSpeed()), (int)(Math.sin(relAngle)*moving.getSpeed()));
                 }
             }
 
@@ -121,10 +126,13 @@ public class Enemy extends Character {
             public void move(Character moving, Player player) {
                 double relAngle = Math.toRadians(GraphicsPanel.getAngle(moving.getCenter(), player.getCenter()));
                 moving.translate((int)(Math.cos(relAngle)*moving.getSpeed()), (int)(Math.sin(relAngle)*moving.getSpeed()));
-                if(moving.getDistance(player) < 60){
-                    Explosion explosion = new Explosion(20, 150);
-                    explosion.init(moving.getX(), moving.getY(), player.getFloor());
-                    moving.kill();
+                if(moving.getDistance(player) < 80){
+                    moving.setSpeed(6);
+                    if(moving.getDistance(player) < 35) {
+                        Explosion explosion = new Explosion(15, 120);
+                        explosion.init(moving.getX(), moving.getY(), player.getFloor());
+                        moving.kill();
+                    }
                 }
             }
 
@@ -166,6 +174,16 @@ public class Enemy extends Character {
 
     public void update(Graphics2D g2, Player player, double angle){
         controller.move(this, player);
+        if(attack!=null){
+            if(player.getDistance(this) > (getEquipped().getBulletRange() + 20)){
+                stopAttack();
+            }
+            else if(!attack.isRunning()){
+                attack.start();
+            }
+        }
+        if(getEquipped() != null && getEquipped().getMagazine() <= 0)
+            getEquipped().refillMag();
         super.update(g2, angle);
     }
 
@@ -180,10 +198,12 @@ public class Enemy extends Character {
     @Override
     public void kill() {
         stopAttack();
-        getFloor().removeEnemy(this);
         for (int i = 0; i < pickups.size(); i++) {
             pickups.get(i).init(getX() + 20 * i, getY() + 20 * i, getFloor());
         }
+
+        getFloor().removeEnemy(this);
+
     }
 
     public void stopAttack(){

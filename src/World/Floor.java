@@ -271,6 +271,15 @@ public class Floor {
     public void removeEnemy(Enemy enemy){
         parent.removeSprite(enemy);
         enemies.remove(enemy);
+        if(enemies.size()<=3){
+            for(Wall wall : walls){
+                Door door = wall.getDoor();
+                if(door!=null){
+                    door.setLocked(false);
+                }
+
+            }
+        }
     }
 
     public ArrayList<Enemy> getEnemies(){

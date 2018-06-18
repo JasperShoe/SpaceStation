@@ -2,9 +2,7 @@ package Characters;
 
 import Client.GraphicsPanel;
 import Client.Images;
-import World.Floor;
-import World.Gun;
-import World.Pickup;
+import World.*;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
@@ -27,15 +25,12 @@ public class Player extends Character implements KeyListener, MouseListener{
 
     private int inv_index;
 
-    private GraphicsPanel graphicsPanel;
-
-    public Player(int x, int y, Floor floor, GraphicsPanel graphicsPanel) {
+    public Player(int x, int y, Floor floor) {
         super(x, y, 100, 2, floor);
         inv_index = 0;
         inventory = new ArrayList<>();
         inventory.add(Gun.get("pistol"));
         equipGun(inventory.get(inv_index));
-        this.graphicsPanel = graphicsPanel;
     }
 
 
@@ -107,11 +102,25 @@ public class Player extends Character implements KeyListener, MouseListener{
             getEquipped().reload();
         }
         else if(keyCode == KeyEvent.VK_SPACE){
-            for(int i = getFloor().getPickups().size() - 1; i >= 0; i--){
-                Pickup pickup = getFloor().getPickups().get(i);
-                if(pickup.getBoundingRectangle().intersects(GraphicsPanel.cursor) && inventory.size() < graphicsPanel.getGUI().getNumGunSlots()){
-                    inventory.add(pickup.getPickup());
-                    getFloor().removePickup(pickup);
+            Floor floor = getFloor();
+            for(int i = floor.getPickups().size() - 1; i >= 0; i--){
+                Pickup pickup = floor.getPickups().get(i);
+                if(     pickup.getBoundingRectangle().intersects(GraphicsPanel.cursor)
+                        && this.getDistance(pickup) < 80
+                        && inventory.size() < floor.getParent().getGUI().getNumGunSlots()){
+
+                            inventory.add(pickup.getPickup());
+                            floor.removePickup(pickup);
+
+                }
+            }
+            for(Wall wall : floor.getWalls()){
+                Door door = wall.getDoor();
+                if(door != null && this.getDistance(door) < 80){
+                    Rectangle door_rect = (Rectangle)door.getBoundingRectangle().clone();
+                    door_rect.setSize(door_rect.width * 2, door_rect.width * 2);
+                    if(door_rect.intersects(GraphicsPanel.cursor))
+                        door.setOpen(!door.isOpen());
                 }
             }
         }

@@ -70,7 +70,7 @@ public class Wall extends Sprite {
     }
 
     public void collide(Sprite other){
-        if(door==null || !door.intersects(other.getBoundingRectangle())){
+        if(door==null || (!door.intersects(other.getBoundingRectangle()) || !door.isOpen())){
             String blocked;
             if(orientation == HORIZONTAL){
                 blocked = (other.getCenter().y < a.y)?"Down":"Up";
@@ -79,12 +79,14 @@ public class Wall extends Sprite {
                 blocked = (other.getCenter().x < a.x)?"Right":"Left";
             }
             other.getDirections().put(blocked, false);
-        } else {
-            door.setOpen(true);
         }
     }
 
     public int getOrientation() {
         return orientation;
+    }
+
+    public Door getDoor(){
+        return door;
     }
 }

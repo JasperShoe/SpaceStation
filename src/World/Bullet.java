@@ -3,6 +3,8 @@ package World;
 import Characters.*;
 import Client.*;
 
+import java.awt.image.BufferedImage;
+
 /**
  * Created by student on 6/2/18.
  */
@@ -13,9 +15,9 @@ public class Bullet extends Sprite {
     private int[] start = new int[2];
     private int idx;
     private boolean expired;
-    public Bullet(int x, int y, int vx, int vy, String imageName, Gun source){
+    public Bullet(int x, int y, int vx, int vy, BufferedImage imageName, Gun source){
         super(x, y, 0, 0);
-        setImg(Images.list.get(imageName));
+        setImg(imageName);
         this.source = source;
         this.vx = vx;
         this.vy = vy;

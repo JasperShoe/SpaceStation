@@ -44,6 +44,7 @@ public class Images {
                 "gun_sniper",
                 "gun_p90",
                 "gun_pistol",
+                "gun_lmg",
 
                 //Floors
                 "floor_0",
@@ -57,6 +58,8 @@ public class Images {
                 "bullet_yellow",
                 "bullet_purple",
                 "bullet_red",
+                "bullet_blue",
+                "bullet_green",
 
                 //Extras
                 "icon_inventory",
@@ -64,7 +67,8 @@ public class Images {
                 "gui_main_panel_overlay",
                 "gui_gunslot_underlay",
                 "cursor"
-                
+
+
         };
         for(String s : loader){
             list.put(s, readImg(s));

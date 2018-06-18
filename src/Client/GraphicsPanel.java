@@ -36,7 +36,7 @@ public class GraphicsPanel extends JPanel {
 
         floor = new Floor(this, 1);
 
-        player = new Player(400-16, 400-16, floor, this);
+        player = new Player(400-16, 400-16, floor);
         player.setSpeed(speed);
 
         player.setImg(Images.list.get("player_front"));
@@ -47,7 +47,7 @@ public class GraphicsPanel extends JPanel {
         gui = new GUI(player);
         add(gui);
 
-        cursor = new Rectangle(0, 0, 10, 10);
+        cursor = new Rectangle(0, 0, 20, 20);
 
 //        for (int i = 0; i < 6; i++) { //temporary enemy spawn for testing purposes
 //            Enemy e = Enemy.get((String)(Enemy.list.keySet().toArray()[(int)(Math.random() * Enemy.list.keySet().size())]));
@@ -86,7 +86,7 @@ public class GraphicsPanel extends JPanel {
 
         Point mousePosition = getMousePosition();
         Point mouse = (mousePosition != null)?mousePosition:new Point(400, 400);
-        cursor.setBounds(mouse.x - translate[0], mouse.y - translate[1], 10, 10);
+        cursor.setBounds(mouse.x - translate[0] - 10, mouse.y - translate[1] - 10, 30, 30);
 
         Cell curr_cell = floor.getMap()[(player.getY())/Cell.defaultHeight][(player.getX())/Cell.defaultWidth];
         if(!curr_cell.isRevealed() && curr_cell.getRect().contains(player.getBoundingRectangle())){
@@ -178,9 +178,6 @@ public class GraphicsPanel extends JPanel {
                 floor.removeExplosion(explosion);
             }
         }
-
-        //        g2.draw(cursor);
-
 
     }
 

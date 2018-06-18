@@ -4,6 +4,8 @@ import javax.swing.*;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.MatteBorder;
 import Characters.Player;
+import World.Pickup;
+import org.w3c.dom.css.Rect;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -186,9 +188,11 @@ public class GUI extends JPanel {
 
                 @Override
                 public void mouseReleased(MouseEvent e) {
-                    if ((e.getX() > gunSlotsPanel.getX() + gunSlotsPanel.getWidth() || e.getY() > gunSlotsPanel.getY() + gunSlotsPanel.getHeight()) && gunSlots.indexOf(g) < player.getInventory().size()) {
+                    if (!GraphicsPanel.cursor.intersects(getGunSlotsPanelBounds()) && gunSlots.indexOf(g) < player.getInventory().size()) {
                         int targetGun = (currentGun + gunSlots.indexOf(g))%player.getInventory().size();
                         if (player.getInventory().size() > 1 && targetGun != 0) {
+                            Pickup drop = new Pickup(player.getInventory().get(targetGun), player.getFloor());
+                            drop.init(GraphicsPanel.cursor.x, GraphicsPanel.cursor.y, player.getFloor());
                             player.removeInventory(targetGun);
                             targetGun = (currentGun + gunSlots.indexOf(g))%player.getInventory().size();
                             player.equipGun(player.getInventory().get(targetGun));
@@ -258,6 +262,7 @@ public class GUI extends JPanel {
                     gunSlots.get(i).setIcon(new ImageIcon(player.getEquipped().getImg()));
                     gunSlots.get(i).setText(Integer.toString(player.getEquipped().getClip()) + "/" + player.getEquipped().getMagazineText());
                 }
+//                gunSlots.get(i).setText(Integer.toString(player.getInventory().get(gunIndex).getClip()) + "/" + player.getInventory().get(gunIndex).getMagazineText());
 
                 if (gunIndex >= player.getInventory().size() - 1) {
                     gunIndex = 0;
@@ -315,9 +320,16 @@ public class GUI extends JPanel {
         stOpen = !stOpen;
         gunSlotsPanel.setOpaque(!gunSlotsPanel.isOpaque());
         gunSlotsPanel.setVisible(!gunSlotsPanel.isVisible());
+        System.out.println(gunSlotsPanel.getBounds());
     }
 
     public int getNumGunSlots(){
         return numGunSlots;
+    }
+
+    public Rectangle getGunSlotsPanelBounds(){
+        Rectangle rect = (Rectangle) gunSlotsPanel.getBounds().clone();
+        rect.setLocation(getX(), getY() + gunSlotsPanel.getY());
+        return rect;
     }
 }

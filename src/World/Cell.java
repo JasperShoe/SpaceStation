@@ -108,9 +108,18 @@ public class Cell {
 
     public void reveal(Floor floor){
         revealed = true;
+        if(floor.getEnemies().size() > 3) {
+            for (Wall wall : floor.getWalls()) {
+                Door door = wall.getDoor();
+                if (door != null) {
+                    wall.getDoor().setOpen(false);
+                    wall.getDoor().setLocked(true);
+                }
+            }
+        }
         for(Enemy enemy : enemies){
-            int eX = coords.x + (int)(Math.random() * Cell.defaultWidth);
-            int eY = coords.y + (int)(Math.random() * Cell.defaultHeight);
+            int eX = coords.x + 64 + (int)(Math.random() * (Cell.defaultWidth-100));
+            int eY = coords.y + 64 + (int)(Math.random() * (Cell.defaultHeight -100));
             enemy.init(eX, eY, floor);
         }
         for(String s : neighbors.keySet()){

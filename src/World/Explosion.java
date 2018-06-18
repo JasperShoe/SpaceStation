@@ -24,9 +24,9 @@ public class Explosion extends Sprite{
 
     public void draw(Graphics2D g2){
         g2.setColor(Color.blue);
-        setX(getX()-1);
-        setY(getY()-1);
-        setDimensions(getX(), getY(), getW() + 2, getH() + 2);
+        setX(getX()-3);
+        setY(getY()-3);
+        setDimensions(getX(), getY(), getW() + 6, getH() + 6);
         g2.draw(getBoundingRectangle());
     }
 

@@ -5,7 +5,7 @@ import Client.Images;
 import java.awt.*;
 
 public class Door extends Sprite {
-    private boolean open;
+    private boolean open, locked;
     private int orientation;
     public Door(Rectangle rect, Floor parent){
         super(rect.x, rect.y, rect.width, rect.height);
@@ -16,7 +16,6 @@ public class Door extends Sprite {
             setDimensions(rect.x + 3 * rect.width/7, rect.y, rect.width / 7, rect.height);
             parent.addWall(new Point(rect.x, rect.y + rect.height/4), new Point(0, rect.height /2), false);
             parent.addWall(new Point(rect.x + rect.width, rect.y + rect.height/4), new Point(0, rect.height / 2), false);
-
 //            setDimensions(rect.x + 3 * rect.width/7, rect.y, rect.width / 7, rect.height);
         }
         else{
@@ -35,7 +34,17 @@ public class Door extends Sprite {
     }
 
     public void setOpen(boolean open) {
-        this.open = open;
+        if(!locked){
+            this.open = open;
+        }
+    }
+
+    public boolean isLocked() {
+        return locked;
+    }
+
+    public void setLocked(boolean locked) {
+        this.locked = locked;
     }
 
     public void draw(Graphics2D g2){
