@@ -273,7 +273,7 @@ public class GUI extends JPanel {
         if(player.getEquipped().getReloadDelay().isRunning()) {
             if(!reloadTimeClock.isRunning()){
                 reloadTimeCount = 0;
-                reloadTimeClock.setDelay((player.getEquipped().getReloadTime())/10);
+                reloadTimeClock.setDelay((player.getEquipped().getReloadTime())/primaryGunSlot.getHeight());
                 reloadTimeClock.start();
             }
             reloadAnimationH = (primaryGunSlot.getHeight() * reloadTimeCount)/(player.getEquipped().getReloadTime());

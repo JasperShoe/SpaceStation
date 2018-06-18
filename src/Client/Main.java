@@ -7,14 +7,20 @@ import java.awt.event.WindowFocusListener;
 import java.awt.event.WindowListener;
 
 public class Main extends JFrame {
-    private GraphicsPanel graphics = new GraphicsPanel();
+    public static Main frame;
+    public static Menu menu;
+
+    public static GraphicsPanel graphics;
 
     public Main(){
         super("Space Station");
         setSize(800, 800 + 22);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
-        add(graphics);
+        menu = new Menu();
+        graphics = new GraphicsPanel();
+        add(menu);
+
         setVisible(true);
 
         addWindowFocusListener(new WindowFocusListener() {
@@ -28,10 +34,19 @@ public class Main extends JFrame {
 
             }
         });
-
     }
 
     public static void main(String[] args) {
-        new Main();
+       frame = new Main();
+    }
+
+    public static void switchPanels(){
+        if(menu.getPlayGame()){
+            frame.remove(menu);
+            frame.add(graphics);
+        } else {
+            frame.remove(graphics);
+            frame.add(menu);
+        }
     }
 }
