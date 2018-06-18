@@ -17,37 +17,54 @@ public class Images {
     static {
         list = new HashMap<>();
         String[] loader = {//add your picture strings here!
+
+                //Player Images
                 "player_front",
                 "player_back",
                 "player_left",
                 "player_right",
+
+                //Enemy Images
                 "enemy_front",
+
+                //Wall Images
                 "wall_panel",
                 "wall_side_closed",
                 "wall_side_opened",
                 "wall_external_side",
+
+                //Door
                 "door_opened",
                 "door_closed",
+
+                //Weapons
                 "gun_mp5",
-                "cursor",
-                "bullet_red",
+                "gun_uzi",
+                "gun_laser",
+                "gun_sniper",
+                "gun_p90",
+                "gun_pistol",
+
+                //Floors
                 "floor_0",
                 "floor_1",
                 "floor_2",
                 "floor_3",
                 "floor_4",
                 "floor_5",
+
+                //Bullets
                 "bullet_yellow",
-                "gun_uzi",
-                "gun_laser",
-                "gun_sniper",
                 "bullet_purple",
-                "gun_p90",
+                "bullet_red",
+
+                //Extras
                 "icon_inventory",
-                "gun_pistol",
                 "icon_upgrades",
                 "gui_main_panel_overlay",
-                "gui_gunslot_underlay"
+                "gui_gunslot_underlay",
+                "cursor"
+                
         };
         for(String s : loader){
             list.put(s, readImg(s));
