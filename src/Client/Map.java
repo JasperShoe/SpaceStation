@@ -1,5 +1,6 @@
 package Client;
 
+import Characters.Enemy;
 import Characters.Player;
 import World.Cell;
 import World.Floor;
@@ -83,11 +84,18 @@ public class Map extends JPanel {
                     g2.setColor(Color.BLACK);
                     g2.fillRect(x, y, w, h);
                 }
-
-                g2.setColor(Color.WHITE);
-                g2.fillRect(pX, pY, pW, pH);
             }
         }
+
+        for(Enemy enemy : floor.getEnemies()){
+            double dEX = 1.0 * width * (enemy.getX()+ translate[0]) / floorW, dEY = 1.0 * height * (enemy.getY()+ translate[1]) / floorH, dEW = width * (1.0 * enemy.getW() / floorW) * 1.0, dEH = height * (1.0 * enemy.getH() / floorH);
+            int eX = (int) dEX, eY = (int) dEY, eW = (int) dEW, eH = (int) dEH;
+            g2.setColor(Color.RED);
+            g2.fillRect(eX, eY, eW, eH);
+        }
+
+        g2.setColor(Color.WHITE);
+        g2.fillRect(pX, pY, pW, pH);
     }
 
     public void setTranslate(int[] translate){
