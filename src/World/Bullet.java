@@ -11,7 +11,7 @@ import java.awt.image.BufferedImage;
 public class Bullet extends Sprite {
 
     private Gun source;
-    private int vx, vy;
+    private int vx, vy, penetrations;
     private int[] start = new int[2];
     private int idx;
     private boolean expired;
@@ -23,6 +23,7 @@ public class Bullet extends Sprite {
         this.vy = vy;
         start[0] = x;
         start[1] = y;
+        penetrations = source.getPenetration();
         setRotation(source.getRotation() + 90);
     }
 
@@ -68,6 +69,10 @@ public class Bullet extends Sprite {
     public void collide(Characters.Character other){
         if(!(other.getClass().equals(source.getOwner().getClass()))){
             other.damage(getDamage());
+            penetrations--;
+            if(penetrations<=0){
+                expired = true;
+            }
         }
     }
 

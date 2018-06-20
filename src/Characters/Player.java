@@ -105,13 +105,9 @@ public class Player extends Character implements KeyListener, MouseListener{
             Floor floor = getFloor();
             for(int i = floor.getPickups().size() - 1; i >= 0; i--){
                 Pickup pickup = floor.getPickups().get(i);
-                if(     pickup.getBoundingRectangle().intersects(GraphicsPanel.cursor)
-                        && this.getDistance(pickup) < 80
-                        && inventory.size() < floor.getParent().getGUI().getNumGunSlots()){
-
-                            inventory.add(pickup.getPickup());
-                            floor.removePickup(pickup);
-
+                if(pickup.getBoundingRectangle().intersects(GraphicsPanel.cursor) && this.getDistance(pickup) < 80){
+                    if(addInventory(inventory.size(), pickup.getPickup()))
+                        floor.removePickup(pickup);
                 }
             }
             for(Wall wall : floor.getWalls()){
@@ -122,6 +118,12 @@ public class Player extends Character implements KeyListener, MouseListener{
                     if(door_rect.intersects(GraphicsPanel.cursor))
                         door.setOpen(!door.isOpen());
                 }
+            }
+
+            Cell curr_cell = floor.getMap()[(getY())/Cell.defaultHeight][(getX())/Cell.defaultWidth];
+            for(Location loc : curr_cell.getLocations()){
+                if(!loc.isUsed() && loc.intersects(getBoundingRectangle()))
+                    loc.interact(this);
             }
         }
         else if(keyCode==KeyEvent.VK_I){
@@ -174,8 +176,18 @@ public class Player extends Character implements KeyListener, MouseListener{
         setTransY(getTransY() + -dy);
     }
 
-    public void addInventory(int i, Gun gun){
-        inventory.add(i, gun);
+    public boolean addInventory(int i, Gun gun){
+        for(Gun g : inventory){
+            if(g.getName().equals(gun.getName())){
+                g.addToMag(gun.getMagazine());
+                return true;
+            }
+        }
+        if( inventory.size() < getFloor().getParent().getGUI().getNumGunSlots()) {
+            inventory.add(i, gun);
+            return true;
+        }
+        return false;
     }
 
     public void removeInventory(int i){

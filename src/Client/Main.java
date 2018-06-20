@@ -19,7 +19,7 @@ public class Main extends JFrame {
         setResizable(false);
         menu = new Menu();
         graphics = new GraphicsPanel();
-        add(menu);
+        add(graphics);
 
         setVisible(true);
 
@@ -44,6 +44,7 @@ public class Main extends JFrame {
         if(menu.getPlayGame()){
             frame.remove(menu);
             frame.add(graphics);
+//            GraphicsPanel.textModule.init();
         } else {
             frame.remove(graphics);
             frame.add(menu);

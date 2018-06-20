@@ -148,6 +148,12 @@ public class Floor {
         for(Wall vertical : verticalWalls){
             walls.add(vertical);
         }
+
+        for(Cell[] row : map){
+            for(Cell c : row){
+                c.populate();
+            }
+        }
     }
 
     public void placeExternalWalls(){

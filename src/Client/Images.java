@@ -70,8 +70,19 @@ public class Images {
                 "icon_map_enemy",
                 "gui_main_panel_overlay",
                 "gui_gunslot_underlay",
-                "cursor"
-                
+                "cursor",
+
+                //Images
+                "boss_captain",
+                "boss_scientist",
+
+                "elevator_closed",
+                "elevator_open",
+
+                "loc_chest",
+                "loc_ammo",
+                "loc_open"
+
         };
         for(String s : loader){
             list.put(s, readImg(s));

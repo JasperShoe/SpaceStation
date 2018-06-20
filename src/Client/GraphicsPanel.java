@@ -20,11 +20,13 @@ public class GraphicsPanel extends JPanel {
     private Floor floor;
 
     public static Rectangle cursor;
+    private TextModule textModule;
     private int[] translate = {0, 0};
 
     private ArrayList<Sprite> moving;
 
     public GraphicsPanel(){
+
         moving = new ArrayList<Sprite>();
 
         setSize(WIDTH, HEIGHT);
@@ -43,6 +45,9 @@ public class GraphicsPanel extends JPanel {
         addSprite(player);
 
         gui = new GUI(player, floor);
+        textModule = new TextModule(this, 800, 800);
+        add(textModule);
+
         add(gui);
 
         cursor = new Rectangle(0, 0, 20, 20);
@@ -197,4 +202,5 @@ public class GraphicsPanel extends JPanel {
     public GUI getGUI() {
         return gui;
     }
+    
 }

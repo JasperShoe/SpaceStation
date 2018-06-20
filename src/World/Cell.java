@@ -18,12 +18,14 @@ public class Cell {
     private HashMap<String, Boolean> walls;
     private HashMap<String, Cell> neighbors;
     private ArrayList<Enemy> enemies;
-    private int tier;
+    private ArrayList<Location> locations;
+    private int tier, num_walls;
 
     public Cell(int x, int y, int tier){
         coords = new Point(x, y);
         this.tier = tier;
         enemies = new ArrayList<>();
+        locations = new ArrayList<>();
         addEnemies((int)(Math.random() * 4 + 2));
         revealed = false;
         walls = new HashMap<>();
@@ -36,6 +38,9 @@ public class Cell {
     public void draw(Graphics2D g2){
         if(revealed){
             g2.drawImage(Images.list.get("floor_tiled"), null, coords.x, coords.y);
+            for(Location l : locations){
+                l.draw(g2);
+            }
         }
         else{
             g2.setColor(Color.black);
@@ -57,6 +62,7 @@ public class Cell {
         String delta = getDelta(wallStart, wallEnd);
         if(delta != null){
             walls.put(delta, true);
+            num_walls++;
         }
     }
 
@@ -141,6 +147,19 @@ public class Cell {
             Enemy toAdd = Enemy.get((String)(Enemy.list.keySet().toArray()[(int)(Math.random() * Enemy.list.keySet().size())]));
             toAdd.scaleHealth(tier);
             enemies.add(toAdd);
+        }
+    }
+
+    public ArrayList<Location> getLocations() {
+        return locations;
+    }
+
+    public void populate(){
+        double chance = Math.random();
+        if(chance < .03 || (num_walls > 3 && chance < .4) || (num_walls > 2 && chance < .2)){
+            int num_items = (Math.random() < .5)?(Math.random()<.5)?1:2:(Math.random() <.8)?(Math.random() < .5)?3:4:(Math.random()<.5)?5:6;
+            Chest chest = new Chest(getCoords().x + defaultWidth/2 - 18, getCoords().y + defaultHeight/2 - 18, num_items);
+            locations.add(chest);
         }
     }
 }

@@ -22,6 +22,7 @@ public class Gun extends Sprite {
     static {
         list = new HashMap<>();
 
+<<<<<<< HEAD
         list.put("pistol", new Gun("pistol", "bullet_yellow", 200, 30, 700, 30, Integer.MAX_VALUE, Integer.MAX_VALUE, 1));
         list.put("mp5", new Gun("mp5", "bullet_red", 5, 10, 500, 5, 20, 200, 4));
         list.put("uzi", new Gun("uzi", "bullet_yellow", 3, 10, 350, 15, 50, 200, 2));
@@ -29,9 +30,18 @@ public class Gun extends Sprite {
         list.put("sniper", new Gun("sniper", "bullet_yellow", 15, 15, 1000, 1, 3, 25, 1));
         list.put("p90", new Gun("p90", "bullet_red", 7, 10, 500, 0, 20, 150, 2));
         list.put("lmg", new Gun("lmg", "bullet_green", 7, 10, 500, 13, 80, 320, 1));
+=======
+        list.put("pistol", new Gun("pistol", "bullet_yellow", 200, 20, 1000, 60, 1000, Integer.MAX_VALUE, 3, Integer.MAX_VALUE));
+        list.put("mp5", new Gun("mp5", "bullet_red", 5, 10, 500, 5, 20, 150, 4, 1));
+        list.put("uzi", new Gun("uzi", "bullet_yellow", 3, 10, 350, 15, 50, 200, 2, 1));
+        list.put("laser", new Gun("laser", "bullet_blue", 10, 10, 800, 2, 6, 30, 2, Integer.MAX_VALUE));
+        list.put("sniper", new Gun("sniper", "bullet_yellow", 15, 15, 1000, 1, 3, 25, 1, 5));
+        list.put("p90", new Gun("p90", "bullet_red", 7, 10, 500, 0, 20, 120, 2, 1));
+        list.put("lmg", new Gun("lmg", "bullet_green", 7, 10, 800, 13, 80, 320, 1, 3));
+>>>>>>> built chest framework; gameplay tweaks
     }
 
-    private int bulletSpeed, bulletDamage, bulletRange, fireRate, clipSize, clip, reloadTime, magazine, fullMag;
+    private int bulletSpeed, bulletDamage, bulletRange, fireRate, clipSize, clip, reloadTime, magazine, fullMag, penetration;
 
     private boolean foreground, automatic, delayed, stopped;
 
@@ -45,7 +55,7 @@ public class Gun extends Sprite {
 
     private Character owner;
 
-    public Gun(String name, String bullet_image, int damage, int speed, int range, int fireRate, int clipSize, int mag, int reloadSpeed){
+    public Gun(String name, String bullet_image, int damage, int speed, int range, int fireRate, int clipSize, int mag, int reloadSpeed, int penetration){
 
         super(0, 0, 0, 0); //image location set when gun needs to be drawn
         setImg(Images.list.get("gun_" + name));
@@ -57,6 +67,7 @@ public class Gun extends Sprite {
         this.bulletRange = range;
         this.clipSize = clipSize;
         this.clip = clipSize;
+        this.penetration = penetration;
         this.magazine = mag;
         this.fullMag = magazine;
         this.reloadTime = 6000/reloadSpeed;
@@ -88,6 +99,15 @@ public class Gun extends Sprite {
                 delayed = false;
                 magazine -= clipSize - clip;
                 clip = clipSize;
+                if(magazine < 0){
+                    clip += magazine;
+                    magazine = 0;
+                }
+                if(clip <= 0){
+                    clip = 0;
+                    magazine = 0;
+                }
+
                 if(!stopped){
                     fire();
                 }
@@ -173,7 +193,7 @@ public class Gun extends Sprite {
     }
 
     public void shoot(){
-        if(magazine > 0) {
+        if(clip>0){
             Gun source = this;
             int sign = (Math.abs(getRotation()) > 120 || getRotation() < -30)?1:-1;
             Point bulletSource = new Point((int) (getCenter().x + getW() / 2 * Math.cos(Math.toRadians(getRotation()))
@@ -190,10 +210,6 @@ public class Gun extends Sprite {
             if (clip <= 0) {
                 reload();
             }
-        }
-        else{
-            magazine = 0;
-            clip = 0;
         }
     }
 
@@ -213,7 +229,7 @@ public class Gun extends Sprite {
 
     public static Gun get(String name){
         Gun model = Gun.list.get(name);
-        return new Gun(model.name, model.bullet_name, model.bulletDamage, model.bulletSpeed, model.bulletRange, model.fireRate, model.clipSize, model.fullMag, 6000/model.reloadTime);
+        return new Gun(model.name, model.bullet_name, model.bulletDamage, model.bulletSpeed, model.bulletRange, model.fireRate, model.clipSize, model.fullMag, 6000/model.reloadTime, model.penetration);
     }
 
     public static Gun getRandom(){
@@ -246,11 +262,20 @@ public class Gun extends Sprite {
         return magazine;
     }
 
+    public void addToMag(int ammo){
+        int toFull = fullMag - magazine;
+        magazine+= (ammo > toFull)?toFull:ammo;
+    }
+
     public void refillMag(){
         magazine = fullMag;
     }
 
     public String getMagazineText(){
         return "" + ((fullMag == Integer.MAX_VALUE)?"∞":magazine);
+    }
+
+    public int getPenetration() {
+        return penetration;
     }
 }
