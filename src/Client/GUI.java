@@ -4,6 +4,7 @@ import javax.swing.*;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.MatteBorder;
 import Characters.Player;
+import World.Floor;
 import World.Pickup;
 import org.w3c.dom.css.Rect;
 
@@ -43,13 +44,22 @@ public class GUI extends JPanel {
 
     private Timer reloadTimeClock;
 
-    public GUI(Player player){
+    private Floor floor;
+
+    private Map map;
+
+    public GUI(Player player, Floor floor){
         setLayout(null);
         setOpaque(false);
         setFocusable(true);
 
         start = new int[]{x, y};
         this.player = player;
+        this.floor = floor;
+
+        int mapW = 200, mapH = 200;
+        map = new Map(player, floor, 800-mapW, 0, mapW, mapH);
+        add(map);
 
         numGunSlots = 5;
         gunSlots = new ArrayList<>();
@@ -74,15 +84,7 @@ public class GUI extends JPanel {
         openUpgrades.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if(!stOpen) {
-                    setOpaque(false);
-                    stOpen = true;
-                    invOpen = false;
-                    gunSlotsPanel.setVisible(false);
-                } else {
-                    setOpaque(false);
-                    stOpen = false;
-                }
+                toggleInv();
             }
         });
 
@@ -95,7 +97,7 @@ public class GUI extends JPanel {
         y = 0;
         w = 200 + buttons.size()*scale + (2+buttons.size())*pad;
         h = (3+ numGunSlots)*pad + (1+2* numGunSlots)*scale;
-        setBounds(x, y, w, h);
+        setBounds(x, y, 800, 800);
 
         mainPanel = new JPanel();
         mainPanel.setBounds(0, 0, w, 3*pad + 3*scale);
@@ -245,6 +247,7 @@ public class GUI extends JPanel {
 
     public void update(int[] translation){
         setTranslate(translation);
+        map.setTranslate(translation);
 
         setX(start[0] - translation[0]);
         setY(start[1] - translation[1]);
@@ -262,7 +265,6 @@ public class GUI extends JPanel {
                     gunSlots.get(i).setIcon(new ImageIcon(player.getEquipped().getImg()));
                     gunSlots.get(i).setText(Integer.toString(player.getEquipped().getClip()) + "/" + player.getEquipped().getMagazineText());
                 }
-//                gunSlots.get(i).setText(Integer.toString(player.getInventory().get(gunIndex).getClip()) + "/" + player.getInventory().get(gunIndex).getMagazineText());
 
                 if (gunIndex >= player.getInventory().size() - 1) {
                     gunIndex = 0;
@@ -315,12 +317,10 @@ public class GUI extends JPanel {
     }
 
     public void toggleInv(){
-        setOpaque(!isOpaque());
         invOpen = !invOpen;
         stOpen = !stOpen;
         gunSlotsPanel.setOpaque(!gunSlotsPanel.isOpaque());
         gunSlotsPanel.setVisible(!gunSlotsPanel.isVisible());
-        System.out.println(gunSlotsPanel.getBounds());
     }
 
     public int getNumGunSlots(){

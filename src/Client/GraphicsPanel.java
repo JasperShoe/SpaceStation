@@ -25,8 +25,6 @@ public class GraphicsPanel extends JPanel {
     private ArrayList<Sprite> moving;
 
     public GraphicsPanel(){
-
-
         moving = new ArrayList<Sprite>();
 
         setSize(WIDTH, HEIGHT);
@@ -44,7 +42,7 @@ public class GraphicsPanel extends JPanel {
         addMouseListener(player);
         addSprite(player);
 
-        gui = new GUI(player);
+        gui = new GUI(player, floor);
         add(gui);
 
         cursor = new Rectangle(0, 0, 20, 20);
@@ -178,7 +176,6 @@ public class GraphicsPanel extends JPanel {
                 floor.removeExplosion(explosion);
             }
         }
-
     }
 
     public void addSprite(Sprite sprite){
