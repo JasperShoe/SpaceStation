@@ -64,6 +64,8 @@ public class Images {
                 //Extras
                 "icon_inventory",
                 "icon_upgrades",
+                "icon_map_player",
+                "icon_map_enemy",
                 "gui_main_panel_overlay",
                 "gui_gunslot_underlay",
                 "cursor"
