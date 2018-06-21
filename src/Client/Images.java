@@ -60,6 +60,9 @@ public class Images {
                 "bullet_yellow",
                 "bullet_purple",
                 "bullet_red",
+                "bullet_blue",
+                "bullet_green",
+                "bullet_orange",
 
                 //Extras
                 "loc_ammo",
