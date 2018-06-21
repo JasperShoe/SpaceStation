@@ -174,9 +174,12 @@ public class Floor {
         int eY = coords.y + Cell.defaultHeight/2 - 64;
         exit.getLocations().add(new Exit(eX, eY));
 
-        map[0][0].addChest();
         for (int i = 0; i < 5; i++) {
             randomCell().addChest();
+        }
+
+        for (int i = 0; i < 5; i++) {
+            randomCell().addCrate();
         }
     }
 

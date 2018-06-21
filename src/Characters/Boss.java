@@ -57,7 +57,7 @@ public class Boss extends Enemy {
     private Player p;
     public Boss(String name, int health, int speed, int damageBoost, Gun gun, String image, AI controller){
         super(health, speed, gun, controller);
-        setImg(Images.list.get("enemy_front"));//"boss_"+image
+        setImg(Images.list.get("boss_" + image));//"boss_"+image
         this.name = name;
         this.imageName = image;
          setDamageBoost(damageBoost);

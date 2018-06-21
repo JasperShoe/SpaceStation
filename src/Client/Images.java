@@ -46,6 +46,7 @@ public class Images {
                 "gun_sniper",
                 "gun_p90",
                 "gun_pistol",
+                "gun_lmg",
 
                 //Floors
                 "floor_0",
@@ -61,9 +62,6 @@ public class Images {
                 "bullet_red",
 
                 //Extras
-                "ammoCrate",
-                "chestCrate",
-                "crateOpen",
                 "icon_inventory",
                 "icon_upgrades",
                 "icon_map_player",
@@ -77,8 +75,7 @@ public class Images {
                 "boss_scientist",
 
 
-                "elevator_closed",
-                "elevator_open",
+                "loc_elevator_opened",
 
                 "loc_chest",
                 "loc_ammo",

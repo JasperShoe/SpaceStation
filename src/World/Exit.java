@@ -9,7 +9,7 @@ import Client.Main;
 public class Exit extends Location {
 
     public Exit(int x, int y){
-        super(x, y, "exit");
+        super(x, y, "elevator_opened");
     }
 
     @Override

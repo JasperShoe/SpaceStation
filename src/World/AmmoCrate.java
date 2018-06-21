@@ -1,6 +1,7 @@
 package World;
 
 import Characters.Player;
+import Client.Images;
 
 /**
  * Created by student on 6/20/18.
@@ -16,6 +17,7 @@ public class AmmoCrate extends Location {
         for(Gun g : player.getInventory()){
             g.refillMag();
         }
+        setImg(Images.list.get("loc_open"));
     }
 
     @Override
