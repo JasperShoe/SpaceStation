@@ -30,7 +30,7 @@ public class Chest extends Location {
             i++;
         }
         setUsed(true);
-        setImg(Images.list.get("open"));
+        setImg(Images.list.get("loc_open"));
     }
 
     @Override
