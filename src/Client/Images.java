@@ -31,11 +31,13 @@ public class Images {
                 "wall_panel",
                 "wall_side_closed",
                 "wall_side_opened",
+                "wall_side_locked",
                 "wall_external_side",
 
                 //Door
                 "door_opened",
                 "door_closed",
+                "door_locked",
 
                 //Weapons
                 "gun_mp5",
@@ -62,6 +64,9 @@ public class Images {
                 "bullet_green",
 
                 //Extras
+                "ammoCrate",
+                "chestCrate",
+                "crateOpen",
                 "icon_inventory",
                 "icon_upgrades",
                 "icon_map_player",
