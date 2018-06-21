@@ -29,6 +29,7 @@ public class GraphicsPanel extends JPanel {
 
         moving = new ArrayList<Sprite>();
 
+        Sounds sounds = new Sounds();
         setSize(WIDTH, HEIGHT);
         setLayout(null);
         setFocusable(true);
@@ -57,14 +58,14 @@ public class GraphicsPanel extends JPanel {
 //            e.init(400 - i * 80, 400 - i * 80, floor);
 //        }
 
-//        sounds.play("theme");
-//        Timer playTheme = new Timer(133000, new ActionListener() {
-//            @Override
-//            public void actionPerformed(ActionEvent e) {
-//                sounds.play("theme");
-//            }
-//        });
-//        playTheme.start();
+        sounds.play("theme");
+        Timer playTheme = new Timer(133000, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                sounds.play("theme");
+            }
+        });
+        playTheme.start();
 
         Timer update = new Timer(1000/60, new ActionListener() {
             @Override
