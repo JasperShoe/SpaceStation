@@ -46,7 +46,6 @@ public class Images {
                 "gun_sniper",
                 "gun_p90",
                 "gun_pistol",
-                "gun_lmg",
 
                 //Floors
                 "floor_0",
@@ -62,6 +61,9 @@ public class Images {
                 "bullet_red",
 
                 //Extras
+                "loc_ammo",
+                "loc_chest",
+                "loc_open",
                 "icon_inventory",
                 "icon_upgrades",
                 "icon_map_player",
