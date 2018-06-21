@@ -13,7 +13,9 @@ import java.awt.event.ActionListener;
  */
 public abstract class Character extends Sprite {
 
-    private int health, maxHealth;
+    private int health, maxHealth, damageBoost, bSpeedBoost, fireRateBoost, clipBoost, magBoost;
+
+    private double reloadBoost;
 
     private Gun equipped;
 
@@ -122,5 +124,53 @@ public abstract class Character extends Sprite {
         }
 
         super.update();
+    }
+
+    public int getDamageBoost() {
+        return damageBoost;
+    }
+
+    public void setDamageBoost(int damageBoost) {
+        this.damageBoost = damageBoost;
+    }
+
+    public double getReloadBoost() {
+        return reloadBoost;
+    }
+
+    public void setReloadBoost(double reloadBoost) {
+        this.reloadBoost = reloadBoost;
+    }
+
+    public int getbSpeedBoost() {
+        return bSpeedBoost;
+    }
+
+    public void setbSpeedBoost(int bSpeedBoost) {
+        this.bSpeedBoost = bSpeedBoost;
+    }
+
+    public int getFireRateBoost() {
+        return fireRateBoost;
+    }
+
+    public void setFireRateBoost(int fireRateBoost) {
+        this.fireRateBoost = fireRateBoost;
+    }
+
+    public int getClipBoost() {
+        return clipBoost;
+    }
+
+    public void setClipBoost(int clipBoost) {
+        this.clipBoost = clipBoost;
+    }
+
+    public int getMagBoost() {
+        return magBoost;
+    }
+
+    public void setMagBoost(int magBoost) {
+        this.magBoost = magBoost;
     }
 }

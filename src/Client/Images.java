@@ -76,6 +76,7 @@ public class Images {
                 "boss_captain",
                 "boss_scientist",
 
+
                 "elevator_closed",
                 "elevator_open",
 

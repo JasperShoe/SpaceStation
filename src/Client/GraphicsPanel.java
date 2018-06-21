@@ -202,5 +202,17 @@ public class GraphicsPanel extends JPanel {
     public GUI getGUI() {
         return gui;
     }
-    
+
+    public Player getPlayer() {
+        return player;
+    }
+
+    public void setFloor(int tier){
+        floor = new Floor(this, tier);
+        for(Gun g : player.getInventory()){
+            g.setEnvironment(floor);
+        }
+        gui.getMap().setFloor(floor);
+        player.setFloor(floor);
+    }
 }

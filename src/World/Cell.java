@@ -1,5 +1,6 @@
 package World;
 
+import Characters.Boss;
 import Characters.Enemy;
 import Client.Images;
 
@@ -14,14 +15,15 @@ public class Cell {
 
     public static final int defaultWidth = 500, defaultHeight = 500;
     private Point coords;
-    private boolean revealed;
+    private boolean revealed, safe;
     private HashMap<String, Boolean> walls;
     private HashMap<String, Cell> neighbors;
     private ArrayList<Enemy> enemies;
     private ArrayList<Location> locations;
     private int tier, num_walls;
+    private Floor floor;
 
-    public Cell(int x, int y, int tier){
+    public Cell(int x, int y, int tier, Floor floor){
         coords = new Point(x, y);
         this.tier = tier;
         enemies = new ArrayList<>();
@@ -33,6 +35,7 @@ public class Cell {
         walls.put("Left", false);
         walls.put("Right", false);
         walls.put("Down", false);
+        this.floor = floor;
     }
 
     public void draw(Graphics2D g2){
@@ -132,6 +135,10 @@ public class Cell {
             if(!walls.get(s) && !neighbors.get(s).isRevealed())
                 neighbors.get(s).reveal(floor);
         }
+
+        for(Location l : locations){
+            l.init(floor);
+        }
     }
 
     public HashMap<String, Cell> getNeighbors() {
@@ -150,16 +157,44 @@ public class Cell {
         }
     }
 
+    public void addEnemy(Enemy e){
+        enemies.add(e);
+    }
+
     public ArrayList<Location> getLocations() {
         return locations;
     }
 
     public void populate(){
-        double chance = Math.random();
-        if(chance < .03 || (num_walls > 3 && chance < .4) || (num_walls > 2 && chance < .2)){
+        double chestChance = Math.random();
+        if(chestChance < .03 || (num_walls > 3 && chestChance < .4) || (num_walls > 2 && chestChance < .2)){
             int num_items = (Math.random() < .5)?(Math.random()<.5)?1:2:(Math.random() <.8)?(Math.random() < .5)?3:4:(Math.random()<.5)?5:6;
             Chest chest = new Chest(getCoords().x + defaultWidth/2 - 18, getCoords().y + defaultHeight/2 - 18, num_items);
             locations.add(chest);
         }
+
+    }
+
+    public boolean isSafe() {
+        return safe;
+    }
+
+    public void setSafe(boolean safe) {
+        this.safe = safe;
+        clearEnemies();
+    }
+
+    public void clearEnemies(){
+        enemies.clear();
+    }
+
+    public void addChest(){
+        int num_items = (Math.random() < .5)?(Math.random()<.5)?1:2:(Math.random() <.8)?(Math.random() < .5)?3:4:(Math.random()<.5)?5:6;
+        Chest chest = new Chest(getCoords().x + defaultWidth/2 - 18, getCoords().y + defaultHeight/2 - 18, num_items);
+        locations.add(chest);
+    }
+
+    public void addCrate(){
+        locations.add(new AmmoCrate(getCoords().x + defaultWidth/2 - 18, getCoords().y + defaultHeight/2 - 18));
     }
 }

@@ -332,4 +332,8 @@ public class GUI extends JPanel {
         rect.setLocation(getX(), getY() + gunSlotsPanel.getY());
         return rect;
     }
+
+    public Map getMap() {
+        return map;
+    }
 }

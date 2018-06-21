@@ -2,6 +2,7 @@ package Characters;
 
 import Client.GraphicsPanel;
 import Client.Images;
+import Client.Main;
 import World.Explosion;
 import World.Floor;
 import World.Gun;
@@ -32,8 +33,7 @@ public class Enemy extends Character {
 
                     @Override
                     public void move(Character moving, Player player) {
-                        double relAngle = Math.toRadians(GraphicsPanel.getAngle(moving.getCenter(), player.getCenter()));
-                        moving.translate((int)(Math.cos(relAngle)*moving.getSpeed()), (int)(Math.sin(relAngle)*moving.getSpeed()));
+                        moveToPlayer(moving, player);
                     }
 
                     @Override
@@ -124,8 +124,7 @@ public class Enemy extends Character {
 
             @Override
             public void move(Character moving, Player player) {
-                double relAngle = Math.toRadians(GraphicsPanel.getAngle(moving.getCenter(), player.getCenter()));
-                moving.translate((int)(Math.cos(relAngle)*moving.getSpeed()), (int)(Math.sin(relAngle)*moving.getSpeed()));
+                moveToPlayer(moving, player);
                 if(moving.getDistance(player) < 80){
                     moving.setSpeed(6);
                     if(moving.getDistance(player) < 35) {
@@ -179,11 +178,15 @@ public class Enemy extends Character {
                 stopAttack();
             }
             else if(!attack.isRunning()){
-                attack.start();
+                startAttack();
             }
         }
-        if(getEquipped() != null && getEquipped().getMagazine() <= 0)
+        if(getEquipped() != null && getEquipped().getMagazine() <= 0) {
             getEquipped().refillMag();
+            if(attack!=null){
+                startAttack();
+            }
+        }
         super.update(g2, angle);
     }
 
@@ -202,6 +205,7 @@ public class Enemy extends Character {
             pickups.get(i).init(getX() + 20 * i, getY() + 20 * i, getFloor());
         }
 
+        Main.graphics.getPlayer().addXP(50);
         getFloor().removeEnemy(this);
 
     }
@@ -213,6 +217,11 @@ public class Enemy extends Character {
         if(attack!=null){
             attack.stop();
         }
+    }
+
+    public void startAttack(){
+        attack = controller.attack(this);
+        attack.start();
     }
 
     @Override
@@ -230,7 +239,13 @@ public class Enemy extends Character {
     }
 
     public void scaleHealth(int tier){
-        double scale = .5 * tier;
+        double scale = .5 * Math.pow(tier, 2);
         setMaxHealth((int)(getMaxHealth() * scale));
+        setHealth(getMaxHealth());
+    }
+
+    public static void moveToPlayer(Character moving, Player player){
+        double relAngle = Math.toRadians(GraphicsPanel.getAngle(moving.getCenter(), player.getCenter()));
+        moving.translate((int)(Math.cos(relAngle)*moving.getSpeed()), (int)(Math.sin(relAngle)*moving.getSpeed()));
     }
 }

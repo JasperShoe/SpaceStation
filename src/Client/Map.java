@@ -99,4 +99,8 @@ public class Map extends JPanel {
     public void setTranslate(int[] translate){
         this.translate = translate;
     }
+
+    public void setFloor(Floor f){
+        this.floor = f;
+    }
 }

@@ -23,14 +23,21 @@ public class Player extends Character implements KeyListener, MouseListener{
 
     private ArrayList<Gun> inventory;
 
-    private int inv_index;
+    private int inv_index, level, xp;
+
+    private Point start;
+
 
     public Player(int x, int y, Floor floor) {
         super(x, y, 100, 2, floor);
         inv_index = 0;
         inventory = new ArrayList<>();
         inventory.add(Gun.get("pistol"));
+        inventory.add(Gun.op.clone());
         equipGun(inventory.get(inv_index));
+        start = new Point(x, y);
+        level = 1;
+        xp = 0;
     }
 
 
@@ -122,7 +129,7 @@ public class Player extends Character implements KeyListener, MouseListener{
 
             Cell curr_cell = floor.getMap()[(getY())/Cell.defaultHeight][(getX())/Cell.defaultWidth];
             for(Location loc : curr_cell.getLocations()){
-                if(!loc.isUsed() && loc.intersects(getBoundingRectangle()))
+                if(!loc.isUsed() && loc.getDistance(this) < 150)
                     loc.interact(this);
             }
         }
@@ -184,6 +191,7 @@ public class Player extends Character implements KeyListener, MouseListener{
             }
         }
         if( inventory.size() < getFloor().getParent().getGUI().getNumGunSlots()) {
+            gun.applyBuffs(this);
             inventory.add(i, gun);
             return true;
         }
@@ -226,5 +234,42 @@ public class Player extends Character implements KeyListener, MouseListener{
     @Override
     public void kill() {
         setHealth(getMaxHealth());
+    }
+
+    public void resetPosition(){
+        setX(start.x);
+        setY(start.y);
+        setTransX(0);
+        setTransY(0);
+
+    }
+
+    public void addXP(int experience){
+        this.xp += experience;
+        System.out.println(xp);
+        int nextLevel = 800 + 200 * level;
+        if(xp >= nextLevel){
+            level++;
+            xp -= nextLevel;
+            levelUp();
+        }
+    }
+
+    public void levelUp(){//TODO: implement specs
+        System.out.println("leveled!");
+        setDamageBoost(getDamageBoost() + 5);
+        setHealth(getMaxHealth()+10);
+        if(level % 10 == 0 && getSpeed() < 6) {
+            setSpeed(getSpeed() + 1);
+        }
+        setbSpeedBoost(getbSpeedBoost()+1);
+        setFireRateBoost(getFireRateBoost()+1);
+        setClipBoost(getClipBoost() + 2);
+        setMagBoost(getMagBoost() + 2);
+        setReloadBoost(getReloadBoost()+.1);
+
+        for(Gun g : inventory){
+            g.applyBuffs(this);
+        }
     }
 }

@@ -1,5 +1,6 @@
 package World;
 
+import Characters.Boss;
 import Client.GraphicsPanel;
 
 import Characters.Enemy;
@@ -25,6 +26,7 @@ public class Floor {
     private ArrayList<Enemy> enemies;
     private ArrayList<Pickup> pickups;
     private ArrayList<Explosion> explosions;
+    private ArrayList<Cell> customOptions;
     private GraphicsPanel parent;
     public Floor(GraphicsPanel parent, int tier){
         this.parent = parent;
@@ -32,6 +34,9 @@ public class Floor {
         enemies = new ArrayList<>();
         pickups = new ArrayList<>();
         explosions = new ArrayList<>();
+        customOptions = new ArrayList<>();
+
+        this.tier = tier;
 
         oppositesDirections = new HashMap<>();
         oppositesDirections.put("Up","Down");
@@ -63,7 +68,8 @@ public class Floor {
         for(int i = 0; i < map.length; i++){
             addIntersection(i+1, 0, new Point(0, (i + 1) * Cell.defaultHeight));
             for (int j = 0; j < map[0].length; j++) {
-                map[i][j] = new Cell(j * Cell.defaultWidth, i * Cell.defaultHeight, tier);
+                map[i][j] = new Cell(j * Cell.defaultWidth, i * Cell.defaultHeight, tier, this);
+                customOptions.add(map[i][j]);
                 addIntersection(i+1, j+1, new Point((j+1) * Cell.defaultWidth, (i+1) * Cell.defaultHeight));
             }
         }
@@ -81,6 +87,7 @@ public class Floor {
                 map[r][c].setNeighbors(cellNeighbors);
             }
         }
+        customOptions.remove(0);
         placeWalls();
     }
 
@@ -110,6 +117,9 @@ public class Floor {
 
     public void placeWalls(){
         placeExternalWalls();
+        addWall(intersections[0][1], "Down", true);
+        addWall(intersections[1][1], "Left", true);
+        map[0][0].setSafe(true);
         while(walls.size() < 200) {
             Wall start = walls.get((int) (Math.random() * walls.size()));
             Point startPoint = start.getA();
@@ -149,10 +159,24 @@ public class Floor {
             walls.add(vertical);
         }
 
-        for(Cell[] row : map){
-            for(Cell c : row){
-                c.populate();
-            }
+//        for(Cell[] row : map){
+//            for(Cell c : row){
+//                c.populate();
+//            }
+//        }
+        Cell bossCell = randomCell();
+        bossCell.clearEnemies();
+        bossCell.addEnemy(Boss.bossList.get("Captain").clone());
+
+        Cell exit = randomCell();
+        Point coords = exit.getCoords();
+        int eX = coords.x + Cell.defaultWidth/2 - 64;
+        int eY = coords.y + Cell.defaultHeight/2 - 64;
+        exit.getLocations().add(new Exit(eX, eY));
+
+        map[0][0].addChest();
+        for (int i = 0; i < 5; i++) {
+            randomCell().addChest();
         }
     }
 
@@ -229,10 +253,11 @@ public class Floor {
         return toAdd;
     }
 
-    public Wall addWall(Point start, Point delta, boolean hasDoor){
+    public Wall addWall(Point start, Point delta, boolean hasDoor, boolean visible){
         Point end = start.getLocation();
         end.translate(delta.x, delta.y);
         Wall toAdd = new Wall(start, end, hasDoor, this);
+        toAdd.setVisible(visible);
         walls.add(toAdd);
         return toAdd;
     }
@@ -332,5 +357,11 @@ public class Floor {
 
     public int getTier() {
         return tier;
+    }
+
+    public Cell randomCell(){
+        Cell c = customOptions.get((int)(Math.random() * customOptions.size()));
+        customOptions.remove(c);
+        return c;
     }
 }

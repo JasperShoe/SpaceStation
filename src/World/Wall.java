@@ -11,6 +11,7 @@ public class Wall extends Sprite {
     public static final int HORIZONTAL = 0, VERTICAL = 1;
     private boolean hasDoor;
     private Door door;
+    private boolean visible;
     //private Cell adjacent;
     public Wall(Point a, Point b, boolean hasDoor, Floor parent) {
         super((a.x<b.x)?a.x:b.x, (a.y<b.y)?a.y:b.y, (b.x-a.x != 0)?Math.abs(b.x - a.x):10, (b.y-a.y != 0)?Math.abs(b.y - a.y):10);
@@ -33,31 +34,34 @@ public class Wall extends Sprite {
         else{
             door = null;
         }
+        visible = true;
     }
 
     public void draw(Graphics2D g2){ //update with images
-        if(Math.abs(getA().x - getB().x) > 10 || Math.abs(getA().y - getB().y) > 10) {
-            if (orientation == HORIZONTAL) {
-                if(hasDoor) {
-                    g2.drawImage(Images.list.get("wall_front"), null, getX(), getY() - Images.list.get("wall_front").getHeight() + 10);
-                } else {
-                    g2.drawImage(Images.list.get("wall_external_front"), null, getX(), getY() - Images.list.get("wall_external_front").getHeight() + 10);
-                }
-            } else {
-                if(hasDoor) {
-                    if(door.isOpen()){
-                        g2.drawImage(Images.list.get("wall_side_opened"), null, getX() - (Images.list.get("wall_side_opened").getWidth() - 10) / 2, getY() - Images.list.get("wall_front").getHeight() + 10);
+        if(visible) {
+            if (Math.abs(getA().x - getB().x) > 10 || Math.abs(getA().y - getB().y) > 10) {
+                if (orientation == HORIZONTAL) {
+                    if (hasDoor) {
+                        g2.drawImage(Images.list.get("wall_front"), null, getX(), getY() - Images.list.get("wall_front").getHeight() + 10);
                     } else {
-                        g2.drawImage(Images.list.get("wall_side_closed"), null, getX() - (Images.list.get("wall_side_closed").getWidth() - 10) / 2, getY() - Images.list.get("wall_front").getHeight() + 10);
+                        g2.drawImage(Images.list.get("wall_external_front"), null, getX(), getY() - Images.list.get("wall_external_front").getHeight() + 10);
                     }
                 } else {
-                    g2.drawImage(Images.list.get("wall_external_side"), null, getX() - (Images.list.get("wall_external_side").getWidth() - 10) / 2, getY() - Images.list.get("wall_front").getHeight() + 10);
+                    if (hasDoor) {
+                        if (door.isOpen()) {
+                            g2.drawImage(Images.list.get("wall_side_opened"), null, getX() - (Images.list.get("wall_side_opened").getWidth() - 10) / 2, getY() - Images.list.get("wall_front").getHeight() + 10);
+                        } else {
+                            g2.drawImage(Images.list.get("wall_side_closed"), null, getX() - (Images.list.get("wall_side_closed").getWidth() - 10) / 2, getY() - Images.list.get("wall_front").getHeight() + 10);
+                        }
+                    } else {
+                        g2.drawImage(Images.list.get("wall_external_side"), null, getX() - (Images.list.get("wall_external_side").getWidth() - 10) / 2, getY() - Images.list.get("wall_front").getHeight() + 10);
+                    }
                 }
             }
-        }
 
-        if(door!=null) {
-            door.draw(g2);
+            if (door != null) {
+                door.draw(g2);
+            }
         }
     }
 
@@ -88,5 +92,13 @@ public class Wall extends Sprite {
 
     public Door getDoor(){
         return door;
+    }
+
+    public boolean isVisible() {
+        return visible;
+    }
+
+    public void setVisible(boolean visible) {
+        this.visible = visible;
     }
 }

@@ -14,14 +14,14 @@ public class Door extends Sprite {
 
         if(orientation == Wall.HORIZONTAL) {
             setDimensions(rect.x + 3 * rect.width/7, rect.y, rect.width / 7, rect.height);
-            parent.addWall(new Point(rect.x, rect.y + rect.height/4), new Point(0, rect.height /2), false);
-            parent.addWall(new Point(rect.x + rect.width, rect.y + rect.height/4), new Point(0, rect.height / 2), false);
+            parent.addWall(new Point(rect.x, rect.y + rect.height/4), new Point(0, rect.height /2), false,true);
+            parent.addWall(new Point(rect.x + rect.width, rect.y + rect.height/4), new Point(0, rect.height / 2), false, true);
 //            setDimensions(rect.x + 3 * rect.width/7, rect.y, rect.width / 7, rect.height);
         }
         else{
             setDimensions(rect.x, rect.y + 3 * rect.height/7, rect.width, rect.height /7);
-            parent.addWall(new Point(rect.x + rect.width/4, rect.y), new Point(rect.width / 2, 0), false);
-            parent.addWall(new Point(rect.x + rect.width/4, rect.y + rect.height), new Point(rect.width / 2, 0), false);
+            parent.addWall(new Point(rect.x + rect.width/4, rect.y), new Point(rect.width / 2, 0), false, true);
+            parent.addWall(new Point(rect.x + rect.width/4, rect.y + rect.height), new Point(rect.width / 2, 0), false,true);
 
 //            setDimensions(rect.x, rect.y + 3 * rect.height/7, rect.width, rect.height /7);
         }

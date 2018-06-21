@@ -19,26 +19,17 @@ import java.util.HashMap;
 public class Gun extends Sprite {
 
     public static HashMap<String, Gun> list;
+    public static Gun op = new Gun("pistol", "bullet_yellow", 200, 20, 1000, 60, 1000, Integer.MAX_VALUE, 3, Integer.MAX_VALUE);
     static {
         list = new HashMap<>();
 
-<<<<<<< HEAD
-        list.put("pistol", new Gun("pistol", "bullet_yellow", 200, 30, 700, 30, Integer.MAX_VALUE, Integer.MAX_VALUE, 1));
-        list.put("mp5", new Gun("mp5", "bullet_red", 5, 10, 500, 5, 20, 200, 4));
-        list.put("uzi", new Gun("uzi", "bullet_yellow", 3, 10, 350, 15, 50, 200, 2));
-        list.put("laser", new Gun("laser", "bullet_blue", 10, 10, 800, 2, 6, 40, 2));
-        list.put("sniper", new Gun("sniper", "bullet_yellow", 15, 15, 1000, 1, 3, 25, 1));
-        list.put("p90", new Gun("p90", "bullet_red", 7, 10, 500, 0, 20, 150, 2));
-        list.put("lmg", new Gun("lmg", "bullet_green", 7, 10, 500, 13, 80, 320, 1));
-=======
         list.put("pistol", new Gun("pistol", "bullet_yellow", 200, 20, 1000, 60, 1000, Integer.MAX_VALUE, 3, Integer.MAX_VALUE));
         list.put("mp5", new Gun("mp5", "bullet_red", 5, 10, 500, 5, 20, 150, 4, 1));
         list.put("uzi", new Gun("uzi", "bullet_yellow", 3, 10, 350, 15, 50, 200, 2, 1));
         list.put("laser", new Gun("laser", "bullet_blue", 10, 10, 800, 2, 6, 30, 2, Integer.MAX_VALUE));
-        list.put("sniper", new Gun("sniper", "bullet_yellow", 15, 15, 1000, 1, 3, 25, 1, 5));
+        list.put("sniper", new Gun("sniper", "bullet_yellow", 15, 15, 1000, 1, 3, 5, 1, 5));
         list.put("p90", new Gun("p90", "bullet_red", 7, 10, 500, 0, 20, 120, 2, 1));
         list.put("lmg", new Gun("lmg", "bullet_green", 7, 10, 800, 13, 80, 320, 1, 3));
->>>>>>> built chest framework; gameplay tweaks
     }
 
     private int bulletSpeed, bulletDamage, bulletRange, fireRate, clipSize, clip, reloadTime, magazine, fullMag, penetration;
@@ -55,7 +46,9 @@ public class Gun extends Sprite {
 
     private Character owner;
 
-    public Gun(String name, String bullet_image, int damage, int speed, int range, int fireRate, int clipSize, int mag, int reloadSpeed, int penetration){
+    private Gun baseline;
+
+    public Gun(String name, String bullet_image, int damage, int speed, int range, int fireRate, int clipSize, int mag, double reloadSpeed, int penetration){
 
         super(0, 0, 0, 0); //image location set when gun needs to be drawn
         setImg(Images.list.get("gun_" + name));
@@ -70,10 +63,12 @@ public class Gun extends Sprite {
         this.penetration = penetration;
         this.magazine = mag;
         this.fullMag = magazine;
-        this.reloadTime = 6000/reloadSpeed;
+        this.reloadTime = (int)(6000/reloadSpeed);
         this.fireRate = fireRate;
         automatic = !(fireRate == 0);
         fireRate = (fireRate == 0)?1:fireRate;
+
+        baseline = this;
 
         foreground = true;
 
@@ -229,7 +224,11 @@ public class Gun extends Sprite {
 
     public static Gun get(String name){
         Gun model = Gun.list.get(name);
-        return new Gun(model.name, model.bullet_name, model.bulletDamage, model.bulletSpeed, model.bulletRange, model.fireRate, model.clipSize, model.fullMag, 6000/model.reloadTime, model.penetration);
+        return model.clone();
+    }
+
+    public Gun clone(){
+        return new Gun(name, bullet_name, bulletDamage, bulletSpeed, bulletRange, fireRate, clipSize, fullMag, 6000/reloadTime, penetration);
     }
 
     public static Gun getRandom(){
@@ -277,5 +276,19 @@ public class Gun extends Sprite {
 
     public int getPenetration() {
         return penetration;
+    }
+
+    public void setBaseline(Gun g){
+        baseline = g;
+    }
+
+    public void applyBuffs(Character c){
+        bulletDamage = baseline.bulletDamage + c.getDamageBoost();
+        bulletSpeed = baseline.bulletSpeed + c.getbSpeedBoost();
+        reloadTime = (int)(6000/((double)(6000/baseline.reloadTime) + c.getReloadBoost()));
+        fireRate = baseline.fireRate + c.getFireRateBoost();
+        clipSize = baseline.clipSize + c.getClipBoost() * baseline.clipSize/10;
+        if(fullMag!=Integer.MAX_VALUE)
+            fullMag = baseline.fullMag + c.getMagBoost() * baseline.fullMag / 10;
     }
 }

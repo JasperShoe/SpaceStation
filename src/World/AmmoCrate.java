@@ -13,7 +13,9 @@ public class AmmoCrate extends Location {
 
     @Override
     public void interact(Player player) {
-
+        for(Gun g : player.getInventory()){
+            g.refillMag();
+        }
     }
 
     @Override
