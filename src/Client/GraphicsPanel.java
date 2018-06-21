@@ -53,7 +53,7 @@ public class GraphicsPanel extends JPanel {
 //        }
 
 //        sounds.play("theme");
-//        Timer playTheme = new Timer(74000, new ActionListener() {
+//        Timer playTheme = new Timer(133000, new ActionListener() {
 //            @Override
 //            public void actionPerformed(ActionEvent e) {
 //                sounds.play("theme");

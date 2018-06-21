@@ -46,7 +46,6 @@ public class Images {
                 "gun_sniper",
                 "gun_p90",
                 "gun_pistol",
-                "gun_lmg",
 
                 //Floors
                 "floor_0",
@@ -60,8 +59,6 @@ public class Images {
                 "bullet_yellow",
                 "bullet_purple",
                 "bullet_red",
-                "bullet_blue",
-                "bullet_green",
 
                 //Extras
                 "ammoCrate",
@@ -74,8 +71,7 @@ public class Images {
                 "gui_main_panel_overlay",
                 "gui_gunslot_underlay",
                 "cursor"
-
-
+                
         };
         for(String s : loader){
             list.put(s, readImg(s));
@@ -100,8 +96,7 @@ public class Images {
              add(15);
              add(5);
             }
-        }, new ArrayList(), new ArrayList(), 0, 0));
-    }
+        }, new ArrayList(), new ArrayList(), 0, 0));}
 
     public static URL buildImageFile(String file){
         ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
