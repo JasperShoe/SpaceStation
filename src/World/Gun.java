@@ -22,7 +22,7 @@ public class Gun extends Sprite {
     static {
         list = new HashMap<>();
 
-        list.put("pistol", new Gun("pistol", "bullet_yellow", 200, 20, 600, 50, Integer.MAX_VALUE, Integer.MAX_VALUE, 3));
+        list.put("pistol", new Gun("pistol", "bullet_yellow", 200, 30, 700, 30, Integer.MAX_VALUE, Integer.MAX_VALUE, 1));
         list.put("mp5", new Gun("mp5", "bullet_red", 5, 10, 500, 5, 20, 200, 4));
         list.put("uzi", new Gun("uzi", "bullet_yellow", 3, 10, 350, 15, 50, 200, 2));
         list.put("laser", new Gun("laser", "bullet_blue", 10, 10, 800, 2, 6, 40, 2));
