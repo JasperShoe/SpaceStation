@@ -19,7 +19,7 @@ public class Main extends JFrame {
         setResizable(false);
         menu = new Menu();
         graphics = new GraphicsPanel();
-        add(graphics);
+        add(menu);
 
         setVisible(true);
 

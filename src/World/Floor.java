@@ -59,7 +59,7 @@ public class Floor {
         neighbors = new HashMap<>();
 
         walls = new ArrayList<>();
-        map = new Cell[9][9];
+        map = new Cell[6][6];
         intersections = new Point[map.length + 1][map[0].length + 1];
         addIntersection(0, 0, new Point(0,0));
         for (int x = 0; x < map[0].length; x++) {

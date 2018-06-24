@@ -14,23 +14,26 @@ import java.util.ArrayList;
 
 public class GraphicsPanel extends JPanel {
     private Player player;
+
     private GUI gui;
 
-    private int speed = 2;
+    private int speed = 10;
+
     private Floor floor;
 
     public static Rectangle cursor;
+
     private TextModule textModule;
+
     private int[] translate = {0, 0};
 
     private ArrayList<Sprite> moving;
 
     public GraphicsPanel(){
-
         moving = new ArrayList<Sprite>();
 
         Sounds sounds = new Sounds();
-        setSize(WIDTH, HEIGHT);
+        setSize(800, 800);
         setLayout(null);
         setFocusable(true);
         setBackground(Color.BLACK);
@@ -53,11 +56,6 @@ public class GraphicsPanel extends JPanel {
 
         cursor = new Rectangle(0, 0, 20, 20);
 
-//        for (int i = 0; i < 6; i++) { //temporary enemy spawn for testing purposes
-//            Enemy e = Enemy.get((String)(Enemy.list.keySet().toArray()[(int)(Math.random() * Enemy.list.keySet().size())]));
-//            e.init(400 - i * 80, 400 - i * 80, floor);
-//        }
-
         sounds.play("theme");
         Timer playTheme = new Timer(133000, new ActionListener() {
             @Override
@@ -76,8 +74,6 @@ public class GraphicsPanel extends JPanel {
         });
 
         update.start();
-
-
     }
 
     public void paintComponent(Graphics g){

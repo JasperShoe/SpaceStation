@@ -19,10 +19,9 @@ import java.util.HashMap;
 public class Gun extends Sprite {
 
     public static HashMap<String, Gun> list;
-    public static Gun op = new Gun("pistol", "bullet_yellow", 200, 20, 1000, 60, 1000, Integer.MAX_VALUE, 3, Integer.MAX_VALUE);
     static {
         list = new HashMap<>();
-
+        list.put("op", new Gun("pistol", "bullet_yellow", 300, 20, 800, 40, 8000, Integer.MAX_VALUE, 1, Integer.MAX_VALUE));
         list.put("pistol", new Gun("pistol", "bullet_yellow", 3, 10, 800, 4, 20, Integer.MAX_VALUE, 3, Integer.MAX_VALUE));
         list.put("mp5", new Gun("mp5", "bullet_red", 5, 10, 500, 5, 20, 150, 4, 1));
         list.put("uzi", new Gun("uzi", "bullet_yellow", 3, 10, 350, 15, 50, 200, 2, 1));

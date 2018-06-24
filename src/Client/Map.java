@@ -10,7 +10,7 @@ import javax.swing.border.CompoundBorder;
 import java.awt.*;
 
 public class Map extends JPanel {
-    private int visibleWidth, visibleHeight, width, height, floorW, floorH,pX, pY, pW, pH;
+    private int originalVW, originalVH, visibleWidth, visibleHeight, originalW, originalH, width, height, floorW, floorH,pX, pY, pW, pH;
 
     private Floor floor;
 
@@ -18,32 +18,32 @@ public class Map extends JPanel {
 
     private int[] translate;
 
-    private double dPX, dPY, dPW, dPH;
-
     private BasicStroke stroke;
 
     private CompoundBorder compoundBorder = new CompoundBorder(BorderFactory.createMatteBorder(2, 2, 2, 2, new Color(0, 150,104)), BorderFactory.createMatteBorder(2, 2, 2, 2, new Color(172, 172,172)));
 
+    private boolean expand = false;
+
     public Map(Player player, Floor floor, int x, int y, int w, int h){
         this.player = player;
         this.floor = floor;
+        originalVW = w;
+        originalVH = h;
         this.visibleWidth = w;
         this.visibleHeight = h;
         width = visibleWidth * 4;
         height = visibleHeight * 4;
+        originalW = width;
+        originalH = height;
         setBounds(x, y, visibleWidth, visibleHeight);
         setBorder(compoundBorder);
 
         floorW = (floor.getMap()[0].length * Cell.defaultWidth);
         floorH = (floor.getMap().length * Cell.defaultHeight);
-        dPX = 1.0 * width * player.getX() / floorW;
-        dPY = 1.0 * height * player.getY() / floorH;
-        dPW = width * (1.0 * player.getW() / floorW) * 1.0;
-        dPH = height * (1.0 * player.getH() / floorH);
-        pX = (int) dPX;
-        pY = (int) dPY;
-        pW = (int) dPW;
-        pH = (int) dPH;
+        pX = (int) (1.0 * width * player.getStart().x/ floorW);
+        pY = (int) (1.0 * height * player.getStart().y / floorH);
+        pW = (int) (width * 1.0 * player.getW() / floorW);
+        pH = (int) (height * 1.0 * player.getH() / floorH);
         stroke = new BasicStroke(Images.list.get("wall_side_closed").getWidth()*width/floorW);
     }
 
@@ -51,20 +51,19 @@ public class Map extends JPanel {
         Graphics2D g2 = (Graphics2D) g;
 
         g2.setStroke(stroke);
-        g2.setColor(Color.BLACK);
+        g2.setColor(new Color(0, 0, 0, 127));
         g2.fillRect(0, 0, width, height);
         for (int r = 0; r < floor.getMap().length; r++) {
             for (int c = 0; c < floor.getMap()[r].length; c++) {
                 Cell cell = floor.getMap()[r][c];
-                double dX = 1.0 * width * (cell.getCoords().x + translate[0])/ floorW, dY = 1.0 * height * (cell.getCoords().y + translate[1])/floorH, dW = 1.0 * width / floor.getMap()[0].length, dH = 1.0 * height / floor.getMap().length;
-                int x = (int) dX, y = (int) dY, w = (int) dW, h = (int) dH;
+                int x = (int) (1.0 * width * (cell.getCoords().x + translate[0])/ floorW), y = (int) (1.0 * height * (cell.getCoords().y + translate[1])/floorH), w = (int) (1.0 * width / floor.getMap()[0].length), h = (int) (1.0 * height / floor.getMap().length);
 
                 if(cell.isRevealed()) {
-                    g2.setColor(new Color(30, 30, 30));
+                    g2.setColor(new Color(30, 30, 30, 127));
                     g2.fillRect(x, y, w, h);
 
 
-                    g2.setColor(new Color(111, 111, 111));
+                    g2.setColor(new Color(111, 111, 111, 127));
                     if (cell.getWalls().get("Up")) {
                         g2.drawLine(x, y, x + w, y);
                     }
@@ -81,26 +80,59 @@ public class Map extends JPanel {
                         g2.drawLine(x + w, y, x + w, y + h);
                     }
                 } else {
-                    g2.setColor(Color.BLACK);
+                    g2.setColor(new Color(0, 0, 0, 127));
                     g2.fillRect(x, y, w, h);
                 }
             }
         }
 
         for(Enemy enemy : floor.getEnemies()){
-            double dEX = 1.0 * width * (enemy.getX()+ translate[0]) / floorW, dEY = 1.0 * height * (enemy.getY()+ translate[1]) / floorH, dEW = width * (1.0 * enemy.getW() / floorW) * 1.0, dEH = height * (1.0 * enemy.getH() / floorH);
-            int eX = (int) dEX, eY = (int) dEY, eW = (int) dEW, eH = (int) dEH;
-            g2.drawImage(Images.list.get("icon_map_enemy"), null, eX, eY);
+            int eX = (int) (1.0 * width * (enemy.getX()+ translate[0]) / floorW), eY = (int) (1.0 * height * (enemy.getY()+ translate[1]) / floorH), eW = (int) (width * 1.0 * enemy.getW() / floorW), eH = (int) (height * 1.0 * enemy.getH() / floorH);
+            g2.setColor(new Color(255, 0, 0));
+            g2.fillOval(eX, eY, eW, eH);
         }
 
-        g2.drawImage(Images.list.get("icon_map_player"), null, pX, pY);
+        g2.setColor(new Color(245, 245, 245));
+        g2.drawOval(pX, pY, pW, pH);
+    }
+
+    public void toggleSize(int w, int h){
+        if(visibleWidth == originalVW){
+            visibleWidth = w;
+            visibleHeight = h;
+            width = w;
+            height = h;
+            setTranslate(new int[]{0, 0});
+            pX = (int) (1.0 * width * player.getX() / floorW);
+            pY = (int) (1.0 * height * player.getY() / floorH);
+        } else {
+            visibleWidth = originalVW;
+            visibleHeight = originalVH;
+            width = originalW;
+            height = originalH;
+            pX = (int) (1.0 * width * player.getStart().x/ floorW);
+            pY = (int) (1.0 * height * player.getStart().y / floorH);
+        }
+        setBounds(800-visibleWidth, 0, visibleWidth, visibleHeight);
+        pW = (int) (width * 1.0 * player.getW() / floorW);
+        pH = (int) (height * 1.0 * player.getH() / floorH);
+        expand = !expand;
     }
 
     public void setTranslate(int[] translate){
         this.translate = translate;
     }
 
+    public void setPlayerLoc(){
+        pX = (int) (1.0 * width * player.getX() / floorW);
+        pY = (int) (1.0 * height * player.getY() / floorH);
+    }
+
     public void setFloor(Floor f){
         this.floor = f;
+    }
+
+    public boolean getExpand(){
+        return expand;
     }
 }

@@ -134,8 +134,9 @@ public class Player extends Character implements KeyListener, MouseListener{
         }
         else if(keyCode==KeyEvent.VK_I){
             getFloor().getParent().getGUI().toggleInv();
+        } else if(keyCode == KeyEvent.VK_M){
+            getFloor().getParent().getGUI().getMap().toggleSize(800-getFloor().getParent().getGUI().getMainPanelBounds().width, 800-getFloor().getParent().getGUI().getMainPanelBounds().width);
         }
-
     }
 
     @Override
@@ -270,5 +271,9 @@ public class Player extends Character implements KeyListener, MouseListener{
         for(Gun g : inventory){
             g.applyBuffs(this);
         }
+    }
+
+    public Point getStart(){
+        return start;
     }
 }

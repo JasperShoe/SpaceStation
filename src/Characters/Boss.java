@@ -12,9 +12,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.HashMap;
 
-/**
- * Created by student on 6/20/18.
- */
 public class Boss extends Enemy {
 
     public static HashMap<String, Boss> bossList;
@@ -73,7 +70,7 @@ public class Boss extends Enemy {
     public void draw(Graphics2D g2) {
         super.draw(g2);
         g2.setColor(Color.white);
-        g2.setFont(new Font("TimesRoman", Font.BOLD, 64));
+        g2.setFont(new Font("Times New Roman", Font.BOLD, 64));
         g2.drawString(name, 0 - p.getTransX(), 700 - p.getTransY());
     }
 

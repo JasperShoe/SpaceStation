@@ -247,7 +247,12 @@ public class GUI extends JPanel {
 
     public void update(int[] translation){
         setTranslate(translation);
-        map.setTranslate(translation);
+
+        if(!map.getExpand()) {
+            map.setTranslate(translation);
+        } else {
+            map.setPlayerLoc();
+        }
 
         setX(start[0] - translation[0]);
         setY(start[1] - translation[1]);
@@ -335,5 +340,9 @@ public class GUI extends JPanel {
 
     public Map getMap() {
         return map;
+    }
+
+    public Rectangle getMainPanelBounds(){
+        return mainPanel.getBounds();
     }
 }
