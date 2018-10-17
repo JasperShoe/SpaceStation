@@ -168,15 +168,17 @@ public class GUI extends JPanel {
             g.setPreferredSize(new Dimension(g.getBounds().width, g.getBounds().height));
             g.setBorderPainted(false);
             g.setFont(font);
-            g.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    int targetGun = (currentGun + gunSlots.indexOf(g))%player.getInventory().size();
-                    if (gunSlots.indexOf(g) < player.getInventory().size()) {
-                        player.equipGun(player.getInventory().get(targetGun));
+            if(g != primaryGunSlot) {
+                g.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        int targetGun = (currentGun + gunSlots.indexOf(g)) % player.getInventory().size();
+                        if (gunSlots.indexOf(g) < player.getInventory().size()) {
+                            player.equipGun(player.getInventory().get(targetGun));
+                        }
                     }
-                }
-            });
+                });
+            }
             g.addMouseListener(new MouseListener() {
                 @Override
                 public void mouseClicked(MouseEvent e) {
