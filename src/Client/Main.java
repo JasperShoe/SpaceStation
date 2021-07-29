@@ -4,19 +4,30 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowFocusListener;
-import java.awt.event.WindowListener;
 
 public class Main extends JFrame {
     public static Main frame;
     public static Menu menu;
-
     public static GraphicsPanel graphics;
+    final Taskbar taskbar = Taskbar.getTaskbar();
+    final ImageIcon ICON = new ImageIcon(Images.list.get("logo"));
 
     public Main(){
         super("Space Station");
         setSize(800, 800 + 22);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
+
+        setIconImage(ICON.getImage());
+
+        try {
+            taskbar.setIconImage(ICON.getImage());
+        } catch (final UnsupportedOperationException e) {
+            System.out.println("The os does not support: 'taskbar.setIconImage'");
+        } catch (final SecurityException e) {
+            System.out.println("There was a security exception for: 'taskbar.setIconImage'");
+        }
+
         menu = new Menu();
         graphics = new GraphicsPanel();
         add(menu);
@@ -34,6 +45,7 @@ public class Main extends JFrame {
 
             }
         });
+
     }
 
     public static void main(String[] args) {

@@ -75,6 +75,7 @@ public class Images {
                 "gui_main_panel_overlay",
                 "gui_gunslot_underlay",
                 "cursor",
+                "logo",
 
                 //Images
                 "boss_captain",
