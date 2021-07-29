@@ -166,7 +166,20 @@ public class Floor {
 //        }
         Cell bossCell = randomCell();
         bossCell.clearEnemies();
-        bossCell.addEnemy(Boss.bossList.get("Captain").clone());
+
+        String boss;
+        switch ((int)(Math.random()*2)){
+            case 0:
+                boss = "Captain";
+                break;
+            case 1:
+                boss = "Scientist";
+                break;
+            default:
+                boss = "Captain";
+        }
+
+        bossCell.addEnemy(Boss.bossList.get(boss).clone());
 
         Cell exit = randomCell();
         Point coords = exit.getCoords();

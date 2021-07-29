@@ -1,17 +1,21 @@
 package Client;
 
-import javax.swing.*;
-import javax.swing.border.CompoundBorder;
-import javax.swing.border.MatteBorder;
 import Characters.Player;
 import World.Floor;
 import World.Pickup;
-import org.w3c.dom.css.Rect;
 
+import javax.swing.*;
+import javax.swing.border.CompoundBorder;
+import javax.swing.border.MatteBorder;
 import java.awt.*;
-import java.awt.event.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
+
+//import org.w3c.dom.css.Rect;
 
 public class GUI extends JPanel {
     private int numGunSlots, pad, scale, w, h, x, y, gunSlotX, gunSlotY, gunSlotW, gunSlotH, buttonX, gunIndex, currentGun;
@@ -120,7 +124,7 @@ public class GUI extends JPanel {
         healthBarRed.setBackground(Color.RED);
 
         healthBarGreen = new JLabel();
-        healthBarGreenW = healthBar.getWidth() * player.getHealth()/100;
+        healthBarGreenW = healthBar.getWidth() * player.getHealth()/player.getMaxHealth();
         healthBarGreen.setBounds(healthBar.getX(), healthBar.getY(), (int) healthBarGreenW, healthBar.getHeight());
         healthBarGreen.setOpaque(true);
         healthBarGreen.setBackground(Color.GREEN);
@@ -299,7 +303,7 @@ public class GUI extends JPanel {
         reloadAnimation.setBounds(primaryGunSlot.getX(), primaryGunSlot.getY() + primaryGunSlot.getHeight() - (int) reloadAnimationH, primaryGunSlot.getWidth(), (int) reloadAnimationH);
 
         healthBar.setText(Integer.toString(player.getHealth()));
-        healthBarGreenW = healthBar.getWidth() * player.getHealth()/100;
+        healthBarGreenW = healthBar.getWidth() * player.getHealth()/player.getMaxHealth();
         healthBarGreen.setBounds(healthBar.getX(), healthBar.getY(), (int)healthBarGreenW, healthBar.getHeight());
     }
 

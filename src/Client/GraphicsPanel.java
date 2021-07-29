@@ -17,7 +17,7 @@ public class GraphicsPanel extends JPanel {
 
     private GUI gui;
 
-    private int speed = 10;
+    private int speed = 5;
 
     private Floor floor;
 
@@ -56,11 +56,12 @@ public class GraphicsPanel extends JPanel {
 
         cursor = new Rectangle(0, 0, 20, 20);
 
-        sounds.play("theme");
+        String song = "theme";
+        sounds.play(song);
         Timer playTheme = new Timer(133000, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                sounds.play("theme");
+                sounds.play(song);
             }
         });
         playTheme.start();

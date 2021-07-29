@@ -1,6 +1,5 @@
 package Characters;
 
-import Client.GraphicsPanel;
 import Client.Images;
 import World.Floor;
 import World.Gun;
@@ -37,6 +36,38 @@ public class Boss extends Enemy {
             @Override
             public Timer attack(Character attacker) {
                 return new Timer(3000, new ActionListener() {
+                    boolean firing;
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        if(!firing){
+                            attacker.getEquipped().fire();
+                            firing = true;
+                        }
+                    }
+                });
+            }
+        }));
+
+        bossList.put("Scientist", new Boss("The Scientist", 200, 3, 20, Gun.get("laser"), "scientist", new AI() {
+            @Override
+            public Point setGoal(Rectangle bounds) {
+                return null;
+            }
+
+            @Override
+            public void customize(Enemy enemy) {
+                enemy.getEquipped().setBulletDamage(enemy.getEquipped().getBulletDamage() + enemy.getDamageBoost());
+                enemy.addPickup(new Pickup(enemy.getEquipped(), enemy.getFloor()));
+            }
+
+            @Override
+            public void move(Character moving, Player player) {
+                moveToPlayer(moving, player);
+            }
+
+            @Override
+            public Timer attack(Character attacker) {
+                return new Timer(2000, new ActionListener() {
                     boolean firing;
                     @Override
                     public void actionPerformed(ActionEvent e) {

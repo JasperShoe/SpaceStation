@@ -29,7 +29,7 @@ public class Player extends Character implements KeyListener, MouseListener{
 
 
     public Player(int x, int y, Floor floor) {
-        super(x, y, 100, 2, floor);
+        super(x, y, 100, 1, floor);
         inv_index = 0;
         inventory = new ArrayList<>();
         inventory.add(Gun.get("pistol"));
@@ -83,8 +83,12 @@ public class Player extends Character implements KeyListener, MouseListener{
         //draw(g2);
     }
 
-    public void switch_gun(){
-        inv_index = (inv_index == inventory.size() - 1)?0:inv_index+1;
+    public void switch_gun(int dir){
+        if(dir == 0) {
+            inv_index = (inv_index == 0) ? inventory.size() - 1 : inv_index - 1;
+        } else {
+            inv_index = (inv_index == inventory.size() - 1) ? 0 : inv_index + 1;
+        }
         getEquipped().stop();
         equipGun(inventory.get(inv_index));
     }
@@ -103,7 +107,9 @@ public class Player extends Character implements KeyListener, MouseListener{
             moveDown = true;
         }
         else if(keyCode == KeyEvent.VK_Q){
-                switch_gun();
+            switch_gun(0);
+        } else if(keyCode == KeyEvent.VK_E){
+            switch_gun(1);
         } else if(keyCode == KeyEvent.VK_R){
             getEquipped().reload();
         }
